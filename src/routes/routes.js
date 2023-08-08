@@ -1,76 +1,53 @@
 const express = require('express');
 const router = express.Router();
-const Prueba = require('../models/modelo');
+const { Estudiante } = require('../models/modelo'); // Asegúrate de que la ruta sea correcta
+const { RamaDeportiva } = require('../models/modelo'); // Asegúrate de que la ruta sea correcta
 
-router.get('/', async (req, res) => {
-    try {
-        const modelos = await Prueba.find().exec();
-        console.log(modelos);
-        res.json(modelos); 
-    } catch (err) {
-        console.error(err);
-        res.status(500).send('Error en el servidor'); 
-    }
-});
-router.get('/:id', async (req, res) => {
-    try {
-        const modelo = await Prueba.findById().exec();
-        console.log(modelo);
-        res.json(modelo); 
-    } catch (err) {
-        console.error(err);
-        res.status(500).send('Error en el servidor'); 
-    }
-});
+// Ruta para agregar un estudiante
+router.post('/estudiantes', async (req, res) => {
+  try {
+    const { nombre, carrera, correo, rut, telefono, descripcion, contraseña, ramaDeportiva, implementosSolicitados, recintoSolicitado } = req.body;
 
-router.post('/', async (req, res) => {
-    try {
-        const nuevoModelo = new Prueba(req.body); // Suponiendo que estás pasando los datos en el cuerpo de la solicitud (req.body)
-        const resultado = await nuevoModelo.save();
-        console.log('Nuevo modelo guardado:', resultado);
-        res.status(201).send(resultado); // 201: Created
-    } catch (err) {
-        console.error(err);
-        res.status(500).send('Error en el servidor');
-    }
+    const nuevoEstudiante = new Estudiante({
+      nombre,
+      carrera,
+      correo,
+      rut,
+      telefono,
+      descripcion,
+      contraseña,
+      ramaDeportiva,
+      implementosSolicitados,
+      recintoSolicitado
+    });
+
+    await nuevoEstudiante.save();
+
+    res.status(201).json({ mensaje: 'Estudiante agregado exitosamente' });
+  } catch (error) {
+    res.status(500).json({ error: 'Error al agregar el estudiante' });
+  }
 });
 
-router.put('/:id', async (req, res) => {
-    const id = req.params.id;
-    
-    try {
-        const nuevoModelo = new Prueba(req.body);
-        const resultado = await Prueba.findByIdAndUpdate(id,nuevoModelo);
-        
-        if (resultado) {
-            console.log('Modelo eliminado:', resultado);
-            res.send(resultado);
-        } else {
-            res.status(404).send('No se encontró el modelo');
-        }
-    } catch (err) {
-        console.error(err);
-        res.status(500).send('Error en el servidor');
+// Ruta para ver las ramas deportivas de un estudiante
+router.get('/estudiantes/:id/ramas-deportivas', async (req, res) => {
+  try {
+    const estudianteId = req.params.id;
+
+    const estudiante = await Estudiante.findById(estudianteId);
+
+    if (!estudiante) {
+      return res.status(404).json({ error: 'Estudiante no encontrado' });
     }
+
+    const ramasDeportivas = estudiante.ramaDeportiva;
+
+    res.json({ ramasDeportivas });
+  } catch (error) {
+    res.status(500).json({ error: 'Error al obtener las ramas deportivas del estudiante' });
+  }
 });
 
-router.delete('/:id', async (req, res) => {
-    const id = req.params.id;
-    
-    try {
-        const resultado = await Prueba.findByIdAndUpdate(id);
-        
-        if (resultado) {
-            console.log('Modelo eliminado:', resultado);
-            res.send(resultado);
-        } else {
-            res.status(404).send('No se encontró el modelo');
-        }
-    } catch (err) {
-        console.error(err);
-        res.status(500).send('Error en el servidor');
-    }
-});
 
 
 module.exports = router;
