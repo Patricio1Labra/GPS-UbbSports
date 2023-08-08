@@ -13,6 +13,9 @@ class Inicio extends Component {
                     <Link to="/pedir-espacio" className="btn btn-dark ml-2">
                         Reservar Espacio Deportivo
                     </Link>
+                    <Link to="/ver-espacio" className="btn btn-dark ml-2">
+                        Reservar Espacio Deportivo
+                    </Link>
                 </div>
             </div>
         );

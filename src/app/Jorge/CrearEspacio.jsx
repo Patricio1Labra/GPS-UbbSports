@@ -1,21 +1,58 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios';
+import Swal from 'sweetalert2';
+import { useNavigate } from 'react-router-dom';
 
 const CrearEspacioDeportivo = () => {
     const [nombre, setNombre] = useState('');
     const [tipo, setTipo] = useState('');
+    const [redirecting, setRedirecting] = useState(false);
+    const navigate = useNavigate();
 
     const handleSubmit = async (event) => {
         event.preventDefault();
 
+        if (!nombre || !tipo) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Por favor, completa todos los campos',
+            });
+            return;
+        }
+
         try {
             await axios.post('/api/crear', { nombre, tipo });
-            console.log('Recinto deportivo creado exitosamente');
+            Swal.fire({
+                icon: 'success',
+                title: 'Éxito',
+                text: 'Recinto deportivo creado exitosamente',
+                timer: 2000,
+                timerProgressBar: true,
+            });
+            setNombre('');
+            setTipo('');
+            setRedirecting(true);
         } catch (error) {
             console.error('Error al crear el recinto deportivo', error);
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Hubo un error al crear el recinto deportivo',
+            });
         }
     };
+
+    useEffect(() => {
+        if (redirecting) {
+            const timeoutId = setTimeout(() => {
+                navigate('/');
+            }, 2100);
+
+            return () => clearTimeout(timeoutId);
+        }
+    }, [redirecting, navigate]);
 
     return (
         <div className="container mt-5">
@@ -43,7 +80,10 @@ const CrearEspacioDeportivo = () => {
                                 onChange={(e) => setTipo(e.target.value)}
                             />
                         </div>
-                        <button type="submit" className="btn btn-dark">Crear Espacio</button>
+                        <div className="d-flex justify-content-between">
+                            <button type="button" className="btn btn-danger" onClick={() => navigate('/')}>Volver</button>
+                            <button type="submit" className="btn btn-dark">Crear Espacio</button>
+                        </div>
                     </form>
                 </div>
             </div>
