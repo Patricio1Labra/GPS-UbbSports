@@ -1,0 +1,78 @@
+:root {
+    --primary: #000000e0;
+    --secondary: #007bff;
+    --light: #ffffff;
+    --grey: #c4ccde;
+}
+
+.navbar{
+    background-color: var(--secondary);
+    padding: 1rem 2rem;
+    border-bottom: 1px solid var(--grey);
+}
+
+body{
+    
+    overflow: hidden;
+    font-family: 'Muli', sans-serif;
+    font-weight: 300;
+    color: var(--primary);  
+}
+.card{
+    width: 100%;
+}
+.controls {
+    width: 100%;
+    background: #e5eaf5;
+    padding: 10px;
+    border-radius: 4px;
+    margin-bottom: 16px;
+    border: 1px solid #000000;
+    align-self: center;
+    font-family: 'calibri';
+    font-size: 18px;
+    color: rgb(0, 0, 0);
+}
+.form-register {
+    font-size: 22px;
+    margin-bottom: 20px;
+}
+#content {
+    align-items: center;
+    overflow-y: auto;
+    height: 100vh;
+    padding-bottom: 5rem;
+}
+
+.center-v {
+    align-items: center;
+}
+
+.center-h {
+    justify-content: center;
+}
+.sidebar {
+    width: 14rem;
+    height: calc(100vh - 52px);
+    border-right: 1px solid var(--grey);
+    background-color: #007bff;
+    
+}
+.ul {
+    list-style: none;
+    padding: 1rem 2rem;   
+}
+.li {
+    margin-bottom: 1rem;
+    color:#ffffff;
+}
+ul li::before{
+    color: #ffffff;
+}
+
+.a {
+    text-decoration: none;
+}
+  .flex{
+    display: flex;
+  }
