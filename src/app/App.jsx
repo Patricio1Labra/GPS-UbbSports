@@ -1,15 +1,37 @@
-import React from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Routes, Route, BrowserRouter } from 'react-router-dom'
+import { Formulario } from './Felipe/Formulario.jsx';
+import { Home } from './Felipe/Home.jsx';
+import { HomeEncargado } from './Felipe/HomeEncargado.jsx';
+import { HomeEntrenador } from './Felipe/HomeEntrenador.jsx';
+// Importa otros componentes y dependencias necesarias
 
-/* para poner rutas
-const App = () => {
-    return (
-        <Router>
-            <Routes>
-                <Route path="/" element={} />
-            </Routes>
-        </Router>
-    );
-};
-*/
+function App() {
+  const storedUser = JSON.parse(localStorage.getItem('user'));
+  const [user, setUser] = useState(storedUser || []);
+ return (
+    <BrowserRouter>
+      <Routes>
+        <Route
+          path="/"
+          element={<Formulario user={user} setUser={setUser} />}
+        />
+        <Route
+          path="/home"
+          element={<Home user={user} setUser={setUser} />}
+        />
+        <Route
+          path="/home-encargado"
+          element={<HomeEncargado user={user} setUser={setUser} />}
+        />
+        <Route
+          path="/home-entrenador"
+          element={<HomeEntrenador user={user} setUser={setUser} />}
+        />
+      </Routes>
+    </BrowserRouter>
+  );
+}
+
+
 export default App;
