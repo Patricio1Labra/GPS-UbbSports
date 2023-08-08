@@ -14,31 +14,6 @@ router.post('/crear', async (req, res) => {
         res.status(500).json({ mensaje: 'Error al crear el recinto deportivo' });
     }
 });
-
-router.post('/cr', async (req, res) => {
-    const { fecha, horaInicio, horaTermino, descripcion } = req.body;
-  
-    try {
-      const nuevoEntrenamiento = new Entrenamiento({
-        asistencia: {
-          fecha,
-          estado: false, // Por defecto, el estado de asistencia podría ser falso
-        },
-        horaEntrada: horaInicio,
-        horaSalida: horaTermino,
-        descripcion: descripcion,
-      });
-  
-      await nuevoEntrenamiento.save();
-      res.status(201).json({ mensaje: 'Entrenamiento creado exitosamente' });
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ mensaje: 'Error al crear el entrenamiento' });
-    }
-  });
-
-
-
   router.get('/recintos', async (req, res) => {
     try {
         const recintos = await RecintoDeportivo.find();
@@ -49,7 +24,34 @@ router.post('/cr', async (req, res) => {
     }
 });
 
+router.get('/solicitudes-recintos', async (req, res) => {
+  try {
+      const solicitudesRecintos = await SolicitudRecinto.find();
+      res.status(200).json(solicitudesRecintos);
+  } catch (error) {
+      console.error('Error al obtener las solicitudes de recintos', error);
+      res.status(500).json({ error: 'Hubo un error al obtener las solicitudes de recintos' });
+  }
+});
 
+// Ruta para actualizar el estado de una solicitud de recinto
+router.put('/solicitudes-recintos/:id', async (req, res) => {
+  try {
+      const solicitudId = req.params.id;
+      const nuevoEstado = req.body.estadosolicitud;
+
+      const solicitudActualizada = await SolicitudRecinto.findByIdAndUpdate(
+          solicitudId,
+          { $set: { estadosolicitud: nuevoEstado } },
+          { new: true }
+      );
+
+      res.json(solicitudActualizada);
+  } catch (error) {
+      console.error('Error al actualizar el estado de la solicitud de recinto', error);
+      res.status(500).json({ error: 'Error al actualizar el estado de la solicitud de recinto' });
+  }
+});
 
 
 
