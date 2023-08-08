@@ -6,6 +6,7 @@ import { Button, Modal } from 'react-bootstrap';
 
 const DropdownRamaDeportiva = () => {
   const [ramas, setRamas] = useState([]);
+  const [recintos, setRecintos] = useState([]);
   const [selectedRama, setSelectedRama] = useState('');
   const [editing, setEditing] = useState(false);
   const [editedData, setEditedData] = useState({
@@ -36,6 +37,15 @@ const DropdownRamaDeportiva = () => {
       })
       .catch(error => {
         console.error('Error fetching data:', error);
+      });
+
+    // Llamada a la API para obtener los recintos deportivos
+    axios.get('/api/recintosDeportivos')
+      .then(response => {
+        setRecintos(response.data);
+      })
+      .catch(error => {
+        console.error('Error fetching recintos:', error);
       });
   }, []);
 
@@ -166,12 +176,12 @@ const DropdownRamaDeportiva = () => {
                                 onChange={handleFormChange}
                               />
                               recinto:
-                              <input className='controls'
-                                name="recinto"
-                                value={editedData.recinto}
-                                onChange={handleFormChange}
-                              />
-                              <animated.div style={buttonAnimation}>
+                              <select className='form-select m-10 w-100 align-self-center' name="recinto" value={editedData.recinto} onChange={handleFormChange}>
+                                <option value="">Seleccione un recinto deportivo</option>
+                                {recintos.map(recinto => (
+                                  <option key={recinto._id} value={recinto.nombre}>{recinto.nombre}</option>
+                                ))}
+                              </select>  <animated.div style={buttonAnimation}>
                                 <button className="btn-primary w-100 align-self-center" type="submit">Enviar Inscripción</button>
                               </animated.div>
                             </form>

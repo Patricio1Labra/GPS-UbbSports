@@ -73,8 +73,8 @@ const RamaDeportivaSchema = new Schema({
     entrenador: String,
     horario: {
         dia: String,
-        horaInicio: Date,
-        HoraSalida: Date
+        horaInicio: String,
+        HoraSalida: String
     },
     cupos: Number,
     recinto: String,

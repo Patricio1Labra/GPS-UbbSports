@@ -1,36 +1,47 @@
 const express = require('express');
 const router = express.Router();
-const { RamaDeportiva } = require('../models/modelo');
+const { RamaDeportiva, RecintoDeportivo } = require('../models/modelo');
 
 
 /////////////////////////////LEO////////////////////////////////////////////////////
 router.post('/inscripciones', async (req, res) => {
     try {
-        const datosInscripcion = req.body;
+        const {
+            alumnos,
+            nombre,
+            descripcion,
+            entrenador,
+            horarioDia,
+            horarioInicio,
+            horarioSalida,
+            cupos,
+            recinto,
+            entrenamiento,
+        } = req.body;
 
-        // Crea una nueva instancia del modelo RamaDeportiva con los datos recibidos
-        const nuevaRamaDeportiva = new RamaDeportiva({
-            alumnos: [],
-            nombre: datosInscripcion.nombre,
-            descripcion: datosInscripcion.espacioDeportivo,
-            entrenador: datosInscripcion.profe,
-            horario: `${datosInscripcion.horarioDia} ${datosInscripcion.horarioInicio} 
-                      ${datosInscripcion.horarioSalida}`,
-            cupos: datosInscripcion.cupos,
-            asistencia: [],
-            recinto: datosInscripcion.espacioDeportivo,
-            entrenamiento: datosInscripcion.descripcion,
+        // Crear una nueva instancia de Inscripcion con los datos recibidos
+        const nuevaInscripcion = new RamaDeportiva({
+            alumnos,
+            nombre,
+            descripcion,
+            entrenador,
+            horario: {
+                dia: horarioDia,
+                horaInicio: horarioInicio,
+                horaSalida: horarioSalida,
+            },
+            cupos,
+            recinto,
+            entrenamiento,
         });
 
-        await nuevaRamaDeportiva.save();
-
+        await nuevaInscripcion.save();
         res.status(201).json({ message: 'Inscripción realizada con éxito' });
     } catch (error) {
-        console.error('Error al enviar la inscripción:', error);
-        res.status(500).json({ error: 'Error interno del servidor' });
+        console.error('Error al guardar la inscripción:', error);
+        res.status(500).json({ error: 'Error al procesar la solicitud' });
     }
 });
-
 
 router.get('/ramasDeportivas', async (req, res) => {
     try {
@@ -55,6 +66,17 @@ router.put('/ramasDeportivas/:nombre', async (req, res) => {
         res.status(500).json({ message: 'Error updating data' });
     }
 });
+
+router.get('/recintosDeportivos', async (req, res) => {
+    try {
+        const recintos = await RecintoDeportivo.find();
+        res.json(recintos);
+    } catch (error) {
+        res.status(500).json({ error: 'Error al obtener los recintos deportivos' });
+    }
+});
+
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////  
 
 
@@ -82,7 +104,7 @@ router.get('/:id', async (req, res) => {
 
 router.post('/', async (req, res) => {
     try {
-        const nuevoModelo = new RamaDeportiva(req.body); // Suponiendo que estás pasando los datos en el cuerpo de la solicitud (req.body)
+        const nuevoModelo = new RecintoDeportivo(req.body); // Suponiendo que estás pasando los datos en el cuerpo de la solicitud (req.body)
         const resultado = await nuevoModelo.save();
         console.log('Nuevo modelo guardado:', resultado);
         res.status(201).send(resultado); // 201: Created

@@ -1,5 +1,5 @@
 import { BrowserRouter as Router } from 'react-router-dom';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSpring, animated } from 'react-spring';
 import axios from 'axios';
 import "../assets/style.css"
@@ -19,6 +19,19 @@ const FormularioInscripcion = () => {
     recinto: '',
     entrenamiento: '',
   });
+  const [recintos, setRecintos] = useState([]);
+
+
+  useEffect(() => {
+    // Llamada a la API para obtener los recintos deportivos
+    axios.get('/api/recintosDeportivos')
+      .then(response => {
+        setRecintos(response.data);
+      })
+      .catch(error => {
+        console.error('Error fetching recintos:', error);
+      });
+  }, []);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -28,8 +41,11 @@ const FormularioInscripcion = () => {
     }));
   };
 
+
   const handleSubmit = async (event) => {
     event.preventDefault();
+    const horarioInicio = new Date(`${datos.horarioDia} ${datos.horarioInicio}`);
+    const horarioSalida = new Date(`${datos.horarioDia} ${datos.horarioSalida}`);
     try {
       const response = await axios.post('/api/inscripciones', datos);
       console.log('Inscripción realizada:', response.data);
@@ -86,19 +102,6 @@ const FormularioInscripcion = () => {
                             onChange={handleChange}
                             required
                           />
-
-                          <input
-                            class="controls"
-                            type="text"
-                            name="espacioDeportivo"
-                            id="espacioDeportivo"
-                            placeholder="Ingrese su el espacio deportivo que quiere solicitar"
-                            minlength="4" maxlenght="22" pattern="[a-zA-Z]+*"
-                            value={datos.espacioDeportivo}
-                            onChange={handleChange}
-                            required
-                          />
-
                           <input
                             class="controls"
                             type="text"
@@ -125,7 +128,7 @@ const FormularioInscripcion = () => {
                             class="controls"
                             type="time"
                             name="horarioSalida"
-                            id="horarioDalida"
+                            id="horarioSalida"
                             placeholder="Ingrese el horario que quiere solicitar"
                             value={datos.horarioSalida}
                             onChange={handleChange}
@@ -134,11 +137,11 @@ const FormularioInscripcion = () => {
                           <input
                             class="controls"
                             type="text"
-                            name="profe"
-                            id="profe"
-                            placeholder="Ingrese el profesor a cargo"
-                            minlength="4" maxlenght="22" pattern="[a-zA-Z]+*"
-                            value={datos.profe}
+                            name="entrenador"
+                            id="entrenador"
+                            placeholder="Ingrese el entrenador a cargo"
+                            minlength="4" maxlength="22" pattern="[a-zA-Z]+*"
+                            value={datos.entrenador}
                             onChange={handleChange}
                             required
                           />
@@ -154,6 +157,13 @@ const FormularioInscripcion = () => {
                             onChange={handleChange}
                             required
                           />
+
+                          <select className='form-select m-10 w-100 align-self-center' name="recinto" value={datos.recinto} onChange={handleChange}>
+                            <option value="">Seleccione un recinto deportivo</option>
+                            {recintos.map(recinto => (
+                              <option key={recinto._id} value={recinto.nombre}>{recinto.nombre}</option>
+                            ))}
+                          </select>
                           <animated.div style={buttonAnimation}>
                             <button className="btn-primary w-100 align-self-center" type="submit">Enviar Inscripción</button>
                           </animated.div>
