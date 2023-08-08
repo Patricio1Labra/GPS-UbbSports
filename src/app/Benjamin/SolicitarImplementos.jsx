@@ -2,48 +2,38 @@ import React, { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios';
 
-const CrearSolicitudRecursos = () => {
-    const [nombreSolicitante, setNombreSolicitante] = useState('');
-    const [monto, setMonto] = useState(0);
+const CrearSolicitudImplementos = () => {
+    const [nombre, setNombre] = useState('');
     const [descripcion, setDescripcion] = useState('');
-    const [ramaSolicitante, setRamaSolicitante] = useState('');
-    const [participantes, setParticipantes] = useState('');
-    const [estadoSolicitud, setEstadoSolicitud] = useState('Pendiente');
+    const [cantidad, setCantidad] = useState(0);
+    const [fechadesolicitud, setFechaDeSolicitud] = useState("");
+    const [estadosolicitud, setEstadoSolicitud] = useState('');
+    
 
     const handleSubmit = async (event) => {
         event.preventDefault();
         try {
-            await axios.post('/api/solicitudesRecursos', { nombreSolicitante, monto, descripcion, ramaSolicitante, participantes, estadoSolicitud });
-            console.log('Solicitud de recursos creada exitosamente');
+            await axios.post('/api/solicitudesImplementos', { nombre, descripcion, cantidad, fechadesolicitud, estadosolicitud });
+            console.log('Solicitud de implementos creada exitosamente');
         } catch (error) {
-            console.error('Error al crear la solicitud de recursos', error);
+            console.error('Error al crear la solicitud de implementos', error);
         }
     };
 
     return (
         <div className="container mt-5">
             <div className="card">
-                <div className="card-header">Crear solicitud de recursos</div>
+                <div className="card-header">Crear solicitud de implmentos</div>
                 <div className="card-body">
                     <form onSubmit={handleSubmit}>
                         <div className="mb-3"> 
-                            <label htmlFor="nombreSolicitante" className="form-label">Nombre</label>
+                            <label htmlFor="nombre" className="form-label">Nombre</label>
                             <input
                                 type="text"
                                 className="form-control"
-                                id="nombreSolicitante"
-                                value={nombreSolicitante}
-                                onChange={(e) => setNombreSolicitante(e.target.value)}
-                            />
-                        </div>
-                        <div className="mb-3">
-                            <label htmlFor="monto" className="form-label">Monto solicitado</label>
-                            <input
-                                type="number"
-                                className="form-control"
-                                id="monto"
-                                value={monto}
-                                onChange={(e) => setMonto(e.target.value)}
+                                id="nombre"
+                                value={nombre}
+                                onChange={(e) => setNombre(e.target.value)}
                             />
                         </div>
                         <div className="mb-3"> 
@@ -57,23 +47,24 @@ const CrearSolicitudRecursos = () => {
                             />
                         </div>
                         <div className="mb-3">
-                            <label htmlFor="ramaSolicitante" className="form-label">Rama a la que pertenece el solicitante</label>
+                            <label htmlFor="cantidad" className="form-label">Cantidad de implementos que necesita</label>
                             <input
-                                type="text"
+                                type="number"
                                 className="form-control"
-                                id="tramaSolicitante"
-                                value={ramaSolicitante}
-                                onChange={(e) => setRamaSolicitante(e.target.value)}
+                                id="cantidad"
+                                value={cantidad}
+                                onChange={(e) => setCantidad(e.target.value)}
                             />
                         </div>
+                        
                         <div className="mb-3">
-                            <label htmlFor="participantes" className="form-label">Participantes de la rama</label>
+                            <label htmlFor="fechadesolicitud" className="form-label">Fecha en la que se solicita</label>
                             <input
-                                type="text"
+                                type="date"
                                 className="form-control"
-                                id="participantes"
-                                value={participantes}
-                                onChange={(e) => setParticipantes(e.target.value)}
+                                id="fechadesolicitud"
+                                value={fechadesolicitud}
+                                onChange={(e) => setFechaDeSolicitud(e.target.value)}
                             />
                         </div>
                         <div className="mb-3">  
@@ -82,9 +73,9 @@ const CrearSolicitudRecursos = () => {
                                 type="text"
                                 className="form-control"
                                 id="estadosolicitud"
-                                value={estadoSolicitud}  
+                                value={estadosolicitud}
                                 onChange={(e) => setEstadoSolicitud(e.target.value)}
-                             />
+                            />
                         </div>
                         <button type="submit" className="btn btn-dark"  style={{ backgroundColor: '#007bff' }}>Crear solicitud de recursos</button>
                     </form>
@@ -94,4 +85,4 @@ const CrearSolicitudRecursos = () => {
     );
 };
 
-export default CrearSolicitudRecursos;
+export default CrearSolicitudImplementos;

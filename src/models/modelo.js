@@ -79,7 +79,8 @@ const RecursosSchema = new Schema({
   monto: Number,
   descripciondeSolicitud: String,
   ramaSolicitante: String,
-  participantes: [String]
+  participantes: [String],
+  estadoSolicitud: String
 });
 
 // Modelos basados en los esquemas
