@@ -56,8 +56,13 @@ const CrearEspacioDeportivo = () => {
 
     return (
         <div className="container mt-5">
+            <h1><i
+            className="fa-solid fa-circle-arrow-left"
+            onClick={() => navigate('/')}
+            style={{ fontSize: '24px', color: 'gray', cursor: 'pointer' }}
+        ></i> Crear Espacio Deportivo</h1>
             <div className="card">
-                <div className="card-header">Crear Espacio Deportivo</div>
+                <div className="card-header ">Crear Espacio Deportivo</div>
                 <div className="card-body">
                     <form onSubmit={handleSubmit}>
                         <div className="mb-3">
@@ -80,9 +85,8 @@ const CrearEspacioDeportivo = () => {
                                 onChange={(e) => setTipo(e.target.value)}
                             />
                         </div>
-                        <div className="d-flex justify-content-between">
-                            <button type="button" className="btn btn-danger" onClick={() => navigate('/')}>Volver</button>
-                            <button type="submit" className="btn btn-dark">Crear Espacio</button>
+                        <div className="row justify-content-center">
+                            <button type="submit" className="btn btn-success col-md-3">Crear Espacio</button>
                         </div>
                     </form>
                 </div>

@@ -70,6 +70,11 @@ const CrearSolicitudRecinto = () => {
 
     return (
         <div className="container mt-5">
+            <h1><i
+            className="fa-solid fa-circle-arrow-left"
+            onClick={() => navigate('/')}
+            style={{ fontSize: '24px', color: 'gray', cursor: 'pointer' }}
+        ></i> Crear Solicitud de Recinto</h1>
             <div className="card">
                 <div className="card-header">Crear Solicitud de Recinto</div>
                 <div className="card-body">
@@ -119,9 +124,8 @@ const CrearSolicitudRecinto = () => {
                                 ))}
                             </select>
                         </div>
-                        <div className="d-flex justify-content-between">
-                            <button type="button" className="btn btn-danger" onClick={() => navigate('/')}>Volver</button>
-                            <button type="submit" className="btn btn-dark">Crear Solicitud</button>
+                        <div className="row justify-content-center">
+                            <button type="submit" className="btn btn-success col-md-3">Crear Solicitud</button>
                         </div>
                     </form>
                 </div>
