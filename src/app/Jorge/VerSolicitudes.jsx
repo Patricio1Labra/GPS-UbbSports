@@ -4,10 +4,10 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 
-
 const SolicitudesRecintos = () => {
     const [solicitudes, setSolicitudes] = useState([]);
     const navigate = useNavigate();
+
     useEffect(() => {
         const fetchSolicitudes = async () => {
             try {
@@ -23,11 +23,7 @@ const SolicitudesRecintos = () => {
     const handleRechazar = async (solicitudId) => {
         try {
             await axios.put(`/api/solicitudes-recintos/${solicitudId}`, { estadosolicitud: 'Rechazada' });
-            setSolicitudes(prevSolicitudes =>
-                prevSolicitudes.map(solicitud =>
-                    solicitud._id === solicitudId ? { ...solicitud, estadosolicitud: 'Rechazada' } : solicitud
-                )
-            );
+            actualizarEstadoSolicitud(solicitudId, 'Rechazada');
             mostrarAlerta('Solicitud rechazada exitosamente', 'success');
         } catch (error) {
             console.error('Error al rechazar la solicitud', error);
@@ -38,16 +34,20 @@ const SolicitudesRecintos = () => {
     const handleAceptar = async (solicitudId) => {
         try {
             await axios.put(`/api/solicitudes-recintos/${solicitudId}`, { estadosolicitud: 'Aceptada' });
-            setSolicitudes(prevSolicitudes =>
-                prevSolicitudes.map(solicitud =>
-                    solicitud._id === solicitudId ? { ...solicitud, estadosolicitud: 'Aceptada' } : solicitud
-                )
-            );
+            actualizarEstadoSolicitud(solicitudId, 'Aceptada');
             mostrarAlerta('Solicitud aceptada exitosamente', 'success');
         } catch (error) {
             console.error('Error al aceptar la solicitud', error);
             mostrarAlerta('Hubo un error al aceptar la solicitud', 'error');
         }
+    };
+
+    const actualizarEstadoSolicitud = (solicitudId, nuevoEstado) => {
+        setSolicitudes(prevSolicitudes =>
+            prevSolicitudes.map(solicitud =>
+                solicitud._id === solicitudId ? { ...solicitud, estadosolicitud: nuevoEstado } : solicitud
+            )
+        );
     };
 
     const mostrarAlerta = (mensaje, tipo) => {
@@ -68,35 +68,36 @@ const SolicitudesRecintos = () => {
             style={{ fontSize: '24px', color: 'gray', cursor: 'pointer' }}
         ></i> Solicitudes de Recintos</h1>
         
-
             <h2>Pendientes</h2>
             <div className="row">
-            {solicitudes.filter(solicitud => solicitud.estadosolicitud === 'Pendiente').length === 0 ? (
+                {solicitudes.filter(solicitud => solicitud.estadosolicitud === 'Pendiente').length === 0 ? (
                     <h4>No hay solicitudes pendientes.</h4>
-                ) : (solicitudes.filter(solicitud => solicitud.estadosolicitud === 'Pendiente').map(solicitud => (
-                    <div className="col-md-4 mb-4" key={solicitud._id}>
-                        <div className="card">
-                            <div className="card-header">
-                                <strong>Nombre:</strong> {solicitud.nombre}
-                            </div>
-                            <div className="card-body">
-                                {/* Mostrar información de la solicitud */}
-                                <p><strong>Descripción:</strong> {solicitud.descripcion}</p>
-                                <p><strong>Estudiante:</strong> {solicitud.estudiante}</p>
-                                <p><strong>Fecha de Solicitud:</strong> {new Date(solicitud.fechadesolicitud).toLocaleDateString()}</p>
-                                <p><strong>Estado:</strong> {solicitud.estadosolicitud}</p>
-                            </div>
-                            <div className="card-footer d-flex justify-content-between">
-                                <button className="btn btn-danger" onClick={() => handleRechazar(solicitud._id)}>Rechazar</button>
-                                <button className="btn btn-success" onClick={() => handleAceptar(solicitud._id)}>Aceptar</button>
+                ) : (
+                    solicitudes.filter(solicitud => solicitud.estadosolicitud === 'Pendiente').map(solicitud => (
+                        <div className="col-md-4 mb-4" key={solicitud._id}>
+                            <div className="card">
+                                <div className="card-header">
+                                    <h4>Solicitud de {solicitud.estudiante} </h4>
+                                </div>
+                                <div className="card-body">
+                                    {/* Mostrar información de la solicitud */}
+                                    <p><strong>Motivo:</strong> {solicitud.motivo}</p>
+                                    <p><strong>Fecha de Solicitud:</strong> {new Date(solicitud.fechadesolicitud).toLocaleDateString()}</p>
+                                    <p><strong>Fecha para Usar:</strong> {new Date(solicitud.fechaparausar).toLocaleDateString()} - {new Date(solicitud.fechaparausar).toLocaleTimeString()}</p>
+                                    <p><strong>Estado:</strong> {solicitud.estadosolicitud}</p>
+                                </div>
+                                <div className="card-footer d-flex justify-content-between">
+                                    <button className="btn btn-danger" onClick={() => handleRechazar(solicitud._id)}>Rechazar</button>
+                                    <button className="btn btn-success" onClick={() => handleAceptar(solicitud._id)}>Aceptar</button>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                )))}
+                    ))
+                )}
             </div>
-
+            {/* Resto del código para mostrar las solicitudes Aceptadas y Rechazadas */}
             <h2>Aceptadas</h2>
-                <div className="row">
+            <div className="row">
                 {solicitudes.filter(solicitud => solicitud.estadosolicitud === 'Aceptada').length === 0 ? (
                     <h4>No hay solicitudes aceptadas.</h4>
                 ) : (
@@ -104,21 +105,23 @@ const SolicitudesRecintos = () => {
                         <div className="col-md-4 mb-4" key={solicitud._id}>
                             <div className="card">
                                 <div className="card-header">
-                                    <strong>Nombre:</strong> {solicitud.nombre}
+                                <h4>Solicitud de {solicitud.estudiante} </h4>
                                 </div>
                                 <div className="card-body">
                                     {/* Mostrar información de la solicitud */}
-                                    <p><strong>Descripción:</strong> {solicitud.descripcion}</p>
+                                    <p><strong>Motivo:</strong> {solicitud.motivo}</p>
                                     <p><strong>Estudiante:</strong> {solicitud.estudiante}</p>
                                     <p><strong>Fecha de Solicitud:</strong> {new Date(solicitud.fechadesolicitud).toLocaleDateString()}</p>
+                                    <p><strong>Fecha para Usar:</strong> {new Date(solicitud.fechaparausar).toLocaleDateString()} - {new Date(solicitud.fechaparausar).toLocaleTimeString()}</p>
                                     <p><strong>Estado:</strong> {solicitud.estadosolicitud}</p>
                                 </div>
                             </div>
                         </div>
-                    )))}
-                </div>
+                    ))
+                )}
+            </div>
             <h2>Rechazadas</h2>
-                <div className="row">
+            <div className="row">
                 {solicitudes.filter(solicitud => solicitud.estadosolicitud === 'Rechazada').length === 0 ? (
                     <h4>No hay solicitudes rechazadas.</h4>
                 ) : (
@@ -126,19 +129,21 @@ const SolicitudesRecintos = () => {
                         <div className="col-md-4 mb-4" key={solicitud._id}>
                             <div className="card">
                                 <div className="card-header">
-                                    <strong>Nombre:</strong> {solicitud.nombre}
+                                <h4>Solicitud de {solicitud.estudiante} </h4>
                                 </div>
                                 <div className="card-body">
                                     {/* Mostrar información de la solicitud */}
-                                    <p><strong>Descripción:</strong> {solicitud.descripcion}</p>
+                                    <p><strong>Motivo:</strong> {solicitud.motivo}</p>
                                     <p><strong>Estudiante:</strong> {solicitud.estudiante}</p>
                                     <p><strong>Fecha de Solicitud:</strong> {new Date(solicitud.fechadesolicitud).toLocaleDateString()}</p>
+                                    <p><strong>Fecha para Usar:</strong> {new Date(solicitud.fechaparausar).toLocaleDateString()} - {new Date(solicitud.fechaparausar).toLocaleTimeString()}</p>
                                     <p><strong>Estado:</strong> {solicitud.estadosolicitud}</p>
                                 </div>
                             </div>
                         </div>
-                    )))}
-                </div>
+                    ))
+                )}
+            </div>
         </div>
     );
 };

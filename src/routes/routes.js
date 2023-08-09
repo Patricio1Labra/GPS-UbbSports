@@ -55,15 +55,15 @@ router.put('/solicitudes-recintos/:id', async (req, res) => {
 
 
 
-  router.post('/crear-solicitud-recinto', async (req, res) => {
-    const { nombre, descripcion, estudiante, estadosolicitud, RecintoDeportivo } = req.body;
+router.post('/crear-solicitud-recinto', async (req, res) => {
+    const { motivo, estudiante, fechaparausar, estadosolicitud, RecintoDeportivo } = req.body;
 
     try {
         const nuevaSolicitudRecinto = new SolicitudRecinto({
-            nombre,
-            descripcion,
+            motivo,
             estudiante,
             fechadesolicitud: new Date(),
+            fechaparausar: new Date(fechaparausar),
             estadosolicitud,
             RecintoDeportivo
         });

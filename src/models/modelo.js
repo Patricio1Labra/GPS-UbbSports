@@ -22,10 +22,10 @@ const SolicitudImplementosSchema = new Schema({
 });
 
 const SolicitudRecintoSchema = new Schema({
-    nombre: String,
-    descripcion: String,
+    motivo: String,
     estudiante: String,
     fechadesolicitud: Date,
+    fechaparausar: Date,
     estadosolicitud: String,
     RecintoDeportivo: String
 });

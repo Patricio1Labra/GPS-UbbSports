@@ -5,9 +5,9 @@ import Swal from 'sweetalert2';
 import { useNavigate } from 'react-router-dom';
 
 const CrearSolicitudRecinto = () => {
-    const [nombre, setNombre] = useState('');
-    const [descripcion, setDescripcion] = useState('');
-    const [estudiante, setEstudiante] = useState('');
+    const [motivo, setMotivo] = useState('');
+    const [fecha, setFecha] = useState('');
+    const [hora, setHora] = useState('');
     const [recintos, setRecintos] = useState([]);
     const [recintoSeleccionado, setRecintoSeleccionado] = useState('');
     const navigate = useNavigate();
@@ -27,7 +27,7 @@ const CrearSolicitudRecinto = () => {
     const handleSubmit = async (event) => {
         event.preventDefault();
 
-        if (!nombre || !descripcion || !estudiante || !recintoSeleccionado) {
+        if (!motivo || !fecha || !hora || !recintoSeleccionado) {
             Swal.fire({
                 icon: 'error',
                 title: 'Campos vacíos',
@@ -36,19 +36,21 @@ const CrearSolicitudRecinto = () => {
             return;
         }
 
+        const fechaHoraCombinada = new Date(`${fecha}T${hora}`);
+
         try {
             await axios.post('/api/crear-solicitud-recinto', {
-                nombre,
-                descripcion,
-                estudiante,
+                motivo,
+                estudiante: 'juan', // Valor fijo para "estudiante"
                 fechadesolicitud: new Date(),
+                fechaparausar: fechaHoraCombinada,
                 estadosolicitud: 'Pendiente',
                 RecintoDeportivo: recintoSeleccionado
             });
 
-            setNombre('');
-            setDescripcion('');
-            setEstudiante('');
+            setMotivo('');
+            setFecha('');
+            setHora('');
             setRecintoSeleccionado('');
 
             Swal.fire({
@@ -70,42 +72,24 @@ const CrearSolicitudRecinto = () => {
 
     return (
         <div className="container mt-5">
-            <h1><i
-            className="fa-solid fa-circle-arrow-left"
-            onClick={() => navigate('/')}
-            style={{ fontSize: '24px', color: 'gray', cursor: 'pointer' }}
-        ></i> Crear Solicitud de Recinto</h1>
+            <h1>
+                <i
+                    className="fa-solid fa-circle-arrow-left"
+                    onClick={() => navigate('/')}
+                    style={{ fontSize: '24px', color: 'gray', cursor: 'pointer' }}
+                ></i> Crear Solicitud de Recinto
+            </h1>
             <div className="card">
                 <div className="card-header">Crear Solicitud de Recinto</div>
                 <div className="card-body">
                     <form onSubmit={handleSubmit}>
                         <div className="mb-3">
-                            <label htmlFor="nombre" className="form-label">Nombre</label>
-                            <input
-                                type="text"
-                                className="form-control"
-                                id="nombre"
-                                value={nombre}
-                                onChange={(e) => setNombre(e.target.value)}
-                            />
-                        </div>
-                        <div className="mb-3">
-                            <label htmlFor="descripcion" className="form-label">Descripción</label>
+                            <label htmlFor="motivo" className="form-label">Motivo</label>
                             <textarea
                                 className="form-control"
-                                id="descripcion"
-                                value={descripcion}
-                                onChange={(e) => setDescripcion(e.target.value)}
-                            />
-                        </div>
-                        <div className="mb-3">
-                            <label htmlFor="estudiante" className="form-label">Estudiante</label>
-                            <input
-                                type="text"
-                                className="form-control"
-                                id="estudiante"
-                                value={estudiante}
-                                onChange={(e) => setEstudiante(e.target.value)}
+                                id="motivo"
+                                value={motivo}
+                                onChange={(e) => setMotivo(e.target.value)}
                             />
                         </div>
                         <div className="mb-3">
@@ -123,6 +107,28 @@ const CrearSolicitudRecinto = () => {
                                     </option>
                                 ))}
                             </select>
+                        </div>
+                        <div className="mb-3">
+                            <label htmlFor="fecha" className="form-label">Fecha para Usar</label>
+                            <input
+                                type="date"
+                                className="form-control"
+                                id="fecha"
+                                value={fecha}
+                                min={new Date().toISOString().split('T')[0]} // Restringir a la fecha actual o posterior
+                                onChange={(e) => setFecha(e.target.value)}
+                            />
+                        </div>
+                        <div className="mb-3">
+                            <label htmlFor="hora" className="form-label">Hora para Usar</label>
+                            <input
+                                type="time"
+                                className="form-control"
+                                id="hora"
+                                value={hora}
+                                min={new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })} // Restringir a la hora actual o posterior
+                                onChange={(e) => setHora(e.target.value)}
+                            />
                         </div>
                         <div className="row justify-content-center">
                             <button type="submit" className="btn btn-success col-md-3">Crear Solicitud</button>
