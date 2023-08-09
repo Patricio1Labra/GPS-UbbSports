@@ -5,6 +5,9 @@ import { Home } from './Felipe/Home.jsx';
 import { HomeEncargado } from './Felipe/HomeEncargado.jsx';
 import { HomeEntrenador } from './Felipe/HomeEntrenador.jsx';
 import { VerSolicitudesImplemento } from './Felipe/Vistas/VerSolicitudesImplemento.jsx'; 
+import Crear from './Jorge/CrearEspacio.jsx';
+import Pedir from './Jorge/PedirEspacio.jsx';
+import Ver from './Jorge/VerSolicitudes.jsx';
 // Importa otros componentes y dependencias necesarias
 
 function App() {
@@ -33,6 +36,9 @@ function App() {
         <Route 
           path="/ver-solicitudes-implemento" 
           element={<VerSolicitudesImplemento />} />
+          <Route path="/crear-espacio" element={<Crear user={user} setUser={setUser} />} />
+                <Route path="/pedir-espacio" element={<Pedir user={user} setUser={setUser} />} />
+                <Route path="/ver-espacio" element={<Ver user={user} setUser={setUser} />} />
       </Routes>
     </BrowserRouter>
   );

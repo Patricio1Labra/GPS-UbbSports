@@ -17,7 +17,6 @@ import LibraryAddOutlinedIcon from '@mui/icons-material/LibraryAddOutlined';
 import RequestPageOutlinedIcon from '@mui/icons-material/RequestPageOutlined';
 import '../Home.css'
 import { Link } from 'react-router-dom';
-import VerSolicitudesImplemento from '../Vistas/VerSolicitudesImplemento.jsx';
 
 export function TempEncargado() {
   const [state, setState] = React.useState({
@@ -45,7 +44,7 @@ export function TempEncargado() {
       <List>
         {['Nueva Rama', 'Editar Rama', 'Nuevo Recinto Deportivo', 'Solicitudes de Recursos'].map((text, index) => (
           <ListItem key={text} disablePadding>
-            <ListItemButton>
+            <ListItemButton component={index === 2 ? Link : 'button'} to="/crear-espacio">
               <ListItemIcon>
               {index % 4 === 0 ? <AddBoxIcon /> :
                 index % 4 === 1 ? <ModeEditIcon /> :
@@ -59,9 +58,9 @@ export function TempEncargado() {
       </List>
       <Divider />
       <List>
-        {['Nueva Solicitud de Recinto Deportivo', 'Ver Solicitudes de Implemento'].map((text, index) => (
+        {['Ver Solicitudes de Recintos Deportivos', 'Ver Solicitudes de Implemento'].map((text, index) => (
           <ListItem key={text} disablePadding>
-            <ListItemButton component={index === 1 ? Link : 'button'} to="/ver-solicitudes-implemento">
+            <ListItemButton component={Link} to={index === 0 ? '/ver-espacio' : '/ver-solicitudes-implemento'}>
               <ListItemIcon>
                 {index % 2 === 0 ? <LibraryAddOutlinedIcon /> : <RemoveRedEyeOutlinedIcon />}
               </ListItemIcon>
