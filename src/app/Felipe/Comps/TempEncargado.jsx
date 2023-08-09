@@ -59,7 +59,7 @@ export function TempEncargado() {
       </List>
       <Divider />
       <List>
-        {['Nueva Solicitud de Recinto Deportivo', 'Ver Solicitudes de Implemento'].map((text, index) => (
+        {['Ver Solicitudes de Recintos Deportivos', 'Ver Solicitudes de Implemento'].map((text, index) => (
           <ListItem key={text} disablePadding>
             <ListItemButton component={index === 1 ? Link : 'button'} to="/ver-solicitudes-implemento">
               <ListItemIcon>

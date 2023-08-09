@@ -30,9 +30,10 @@ function App() {
           path="/home-entrenador"
           element={<HomeEntrenador user={user} setUser={setUser} />}
         />
-        <Route 
-          path="/ver-solicitudes-implemento" 
-          element={<VerSolicitudesImplemento />} />
+        <Route
+          path="/ver-solicitudes-implemento"
+          element={<VerSolicitudesImplemento user={user} setUser={setUser}/>}
+        />
       </Routes>
     </BrowserRouter>
   );

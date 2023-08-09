@@ -14,7 +14,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import SportsCricketIcon from '@mui/icons-material/SportsCricket';
 import '../Home.css'
 import LibraryBooksIcon from '@mui/icons-material/LibraryBooks';
-
+import { Link } from 'react-router-dom';
 export function TemporaryDrawer() {
   const [state, setState] = React.useState({
     top: false,
@@ -30,7 +30,12 @@ export function TemporaryDrawer() {
 
     setState({ ...state, [anchor]: open });
   };
-
+  const links = [
+    { text: 'Ver Ramas', path: '/home', icon: <LibraryBooksIcon /> },
+    { text: 'Ver Horario', path: '/home', icon: <CalendarMonthIcon /> },
+    { text: 'Pedir Recinto Deportivo', path: '/pedir-espacio', icon: <SportsBasketballIcon /> },
+    { text: 'Solicitar Recursos', path: '/home', icon: <SportsCricketIcon /> }
+  ];
   const list = (anchor) => (
     <Box
       sx={{ width: anchor === 'top' || anchor === 'bottom' ? 'auto' : 250 }}
@@ -38,17 +43,12 @@ export function TemporaryDrawer() {
       onClick={toggleDrawer(anchor, false)}
       onKeyDown={toggleDrawer(anchor, false)}
     >
-      <List>
-        {['Ver Ramas', 'Ver Horario', 'Pedir Recinto Deportivo', 'Solicitar Recursos'].map((text, index) => (
-          <ListItem key={text} disablePadding>
-            <ListItemButton >
-              <ListItemIcon>
-                {index % 4 === 0 ? <LibraryBooksIcon /> :
-                index % 4 === 1 ? <CalendarMonthIcon /> :
-                index % 4 === 2 ? <SportsBasketballIcon /> :
-                index % 4 === 3 ? <SportsCricketIcon /> : null} 
-              </ListItemIcon>
-              <ListItemText primary={text} />
+       <List>
+        {links.map((link, index) => (
+          <ListItem key={link.text} disablePadding>
+            <ListItemButton component={Link} to={link.path}>
+              <ListItemIcon>{link.icon}</ListItemIcon>
+              <ListItemText primary={link.text} />
             </ListItemButton>
           </ListItem>
         ))}

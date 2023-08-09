@@ -100,49 +100,33 @@ router.post('/entrenadorespost', async (req, res) => {
     }
 });
 
-router.post('/solicitudImplementos', async (req, res) => {
-  const { nombre, descripcion, cantidad } = req.body;
-  const estadosolicitud= "Pendiente";
-  const fechadesolicitud= new Date();
+router.put('/solicitudImplementos/:nombre', async (req, res) => {
+  const nombre = req.params.nombre;
+  const nuevoEstado = req.body.estadosolicitud;
+
   try {
-      // Validar campos requeridos
-      if (!nombre || !descripcion || !cantidad) {
-          return res.status(400).json({ error: 'Faltan campos obligatorios en la solicitud' });
+      const solicitudActualizada = await SolicitudImplementos.findOneAndUpdate(
+          { nombre: nombre },
+          { estadosolicitud: nuevoEstado },
+          { new: true }
+      );
+
+      if (!solicitudActualizada) {
+          return res.status(404).json({ error: 'Solicitud no encontrada' });
       }
 
-      // Validar que cantidad sea mayor que cero
-      if (cantidad <= 0) {
-      return res.status(400).json({ error: 'El campo "cantidad" debe ser mayor que cero' });
-      }
-
-      // Validar longitud de texto para nombre 
-      if (nombre.length < 3 || nombre.length > 50) {
-          return res.status(400).json({ error: 'El campo "nombre" debe tener entre 3 y 50 caracteres' });
-      }
-
-      // Validar que fechadesolicitud sea una fecha válida
-      if (isNaN(Date.parse(fechadesolicitud))) {
-          return res.status(400).json({ error: 'El campo "fechadesolicitud" no es una fecha válida' });
-      }
-
-      // Crear una nueva instancia del modelo de solicitud con los datos recibidos
-      const Solicitudimplementos = new SolicitudImplementos({
-          nombre,
-          descripcion,
-          cantidad,
-          fechadesolicitud,
-          estadosolicitud: estadosolicitud
-      });
-
-      // Guardar la solicitud en la base de datos
-      await Solicitudimplementos.save();
-      console.log('Solicitud de implementos creada exitosamente');
-      res.status(201).json({ message: 'Solicitud de implementos creada exitosamente' });
-  }catch(error) {
-      console.error('Error al crear la solicitud de implementos', error);
-      res.status(500).json({ error: 'Error al crear la solicitud de implementos' });
+      res.status(200).json(solicitudActualizada);
+  } catch (error) {
+      res.status(500).json({ error: 'Hubo un error al actualizar la solicitud' });
   }
-
+});
+router.get('/obtener-solicitudes', async (req, res) => {
+  try {
+    const solicitudes = await SolicitudImplementos.find();
+    res.status(200).json(solicitudes);
+  } catch (error) {
+    res.status(500).json({ error: 'Hubo un error al obtener las solicitudes.' });
+  }
 });
 module.exports = router;
 
