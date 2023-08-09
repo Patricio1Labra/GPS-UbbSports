@@ -15,6 +15,7 @@ import SportsCricketIcon from '@mui/icons-material/SportsCricket';
 import '../Home.css'
 import LibraryBooksIcon from '@mui/icons-material/LibraryBooks';
 import { Link } from 'react-router-dom';
+
 export function TemporaryDrawer() {
   const [state, setState] = React.useState({
     top: false,
@@ -35,6 +36,7 @@ export function TemporaryDrawer() {
     { text: 'Ver Horario', path: '/home', icon: <CalendarMonthIcon /> },
     { text: 'Pedir Recinto Deportivo', path: '/pedir-espacio', icon: <SportsBasketballIcon /> },
     { text: 'Solicitar Recursos', path: '/home', icon: <SportsCricketIcon /> },
+    { text: 'Ver Ramas Inscritas', path: '/ver-ramas-inscritas', icon: <CalendarMonthIcon /> },
   ];
   const list = (anchor) => (
     <Box
