@@ -102,4 +102,22 @@ router.get('/recursos', async (req, res) => {
     }
 });
 
+router.put('/recursos/:id', async (req, res) => {
+    try {
+        const solicitudId = req.params.id;
+        const nuevoEstado = req.body.estadosolicitud;
+  
+        const solicitudActualizada = await Recursos.findByIdAndUpdate(
+            solicitudId,
+            { $set: { estadosolicitud: nuevoEstado } },
+            { new: true }
+        );
+  
+        res.json(solicitudActualizada);
+    } catch (error) {
+        console.error('Error al actualizar el estado de la solicitud de recursos', error);
+        res.status(500).json({ error: 'Error al actualizar el estado de la solicitud de recursos' });
+    }
+});
+
 module.exports = router;

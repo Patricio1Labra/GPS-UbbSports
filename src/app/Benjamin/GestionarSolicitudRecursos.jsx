@@ -18,13 +18,29 @@ const GestionarSolicitudesRecursos = () => {
         }
     };
 
-    const handleChangeEstado = async (index, nuevoEstado) => {
+    const handleRechazar = async (index) => {
         const updatedSolicitudes = [...solicitudesRecursos];
         const solicitud = updatedSolicitudes[index];
-
+    
+        solicitud.estadoSolicitud = 'Rechazada';
+        setSolicitudesRecursos(updatedSolicitudes);
+    
         try {
-            await axios.put(`/api/recursos/${solicitud.id}`, solicitud);
-            setSolicitudesRecursos(updatedSolicitudes);
+            await axios.put(`/api/recursos/${solicitud._id}`, solicitud);
+        } catch (error) {
+            console.error('Error cambiando el estado de la solicitud', error);
+        }
+    };
+
+    const handleAceptar = async (index) => {
+        const updatedSolicitudes = [...solicitudesRecursos];
+        const solicitud = updatedSolicitudes[index];
+    
+        solicitud.estadoSolicitud = 'Aceptada';
+        setSolicitudesRecursos(updatedSolicitudes);
+    
+        try {
+            await axios.put(`/api/recursos/${solicitud._id}`, solicitud);
         } catch (error) {
             console.error('Error cambiando el estado de la solicitud', error);
         }
@@ -57,13 +73,13 @@ const GestionarSolicitudesRecursos = () => {
                             <td>
                                 <button
                                     className="btn btn-success"
-                                    onClick={() => handleChangeEstado(index, 'Aprobada')}
-                                >
-                                    Aprobar
+                                    onClick={() => handleAceptar(index)}
+>
+                                    Aceptar
                                 </button>
                                 <button
                                     className="btn btn-danger"
-                                    onClick={() => handleChangeEstado(index, 'Rechazada')}
+                                    onClick={() => handleRechazar(index)}
                                 >
                                     Rechazar
                                 </button>
