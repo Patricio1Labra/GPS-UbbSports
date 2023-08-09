@@ -1,90 +1,64 @@
-import React, { Component } from 'react';
-import { Typography } from '@mui/material';
-import { DataGrid } from '@mui/x-data-grid';
-import Button from '@mui/material/Button';
-import VerHorario from './verHorario.jsx'; // Asegúrate de que la ruta sea correcta
+import React, { useState, useEffect } from 'react';
+import DataTable from 'react-data-table-component';
 import axios from 'axios';
+import VerHorario from './verHorario.jsx'; // Asegúrate de la ruta correcta
 
-class VerRamaInscrita extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      ramasDeportivas: [],
-      loading: true,
-      showHorarioModal: false,
-    };
-  }
+const VerRamaInscritas = () => {
+    const [ramasInscritas, setRamasInscritas] = useState([]);
+    const [modalIsOpen, setModalIsOpen] = useState(false);
+    const [selectedRama, setSelectedRama] = useState(null);
+    const estudianteId = '64d3544345d266a0d45a5f5c'; // ID del estudiante (ajusta esto)
 
-  async componentDidMount() {
-    try {
-      const estudianteId = '64d2df23f777311c22e7fb56'; // Cambia esto para obtener el ID del estudiante
+    useEffect(() => {
+        // Obtiene las ramas deportivas inscritas del estudiante
+        axios.get(`/api/estudiantes/${estudianteId}/ramas`)
+            .then(response => {
+                setRamasInscritas(response.data);
+            })
+            .catch(error => {
+                console.error('Error al obtener las ramas inscritas:', error);
+            });
+    }, []);
 
-      const response = await axios.get(`/api/estudiante/${estudianteId}/ramas`);
-
-      const ramasDeportivas = response.data;
-      console.log(ramasDeportivas);
-      this.setState({ ramasDeportivas, loading: false });
-    } catch (error) {
-      console.error('Error al obtener las ramas deportivas del estudiante:', error);
-      this.setState({ loading: false });
-    }
-  }
- 
-  handleOpenHorarioModal = (nombreRama, entrenadorRama) => {
-    this.verHorarioComponent.handleOpenModal(nombreRama, entrenadorRama);
-  };
-
-  render() {
     const columns = [
-      { field: 'id', headerName: 'ID', width: 70 },
-      { field: 'nombre', headerName: 'Nombre de Rama', flex: 1 },
-      {
-        field: 'verHorario',
-        headerName: 'Ver Horario',
-        width: 150,
-        renderCell: (params) => (
-          <Button
-            variant="contained"
-            color="primary"
-            size="small"
-            onClick={() => this.handleOpenHorarioModal(params.row.nombre, params.row.entrenador)}
-          >
-            Ver Horario
-          </Button>
-        ),
-      },
+        { name: 'Nombre de la Rama', selector: 'nombre', sortable: true },
+        {
+            name: 'Ver Horario',
+            cell: row => (
+                <button onClick={() => openModal(row)}>Ver Horario</button>
+            ),
+            ignoreRowClick: true,
+            allowOverflow: true,
+            button: true,
+        },
     ];
 
-    const { ramasDeportivas, loading } = this.state;
+    const openModal = (rama) => {
+        setSelectedRama(rama);
+        setModalIsOpen(true);
+    };
+
+    const closeModal = () => {
+        setSelectedRama(null);
+        setModalIsOpen(false);
+    };
 
     return (
-      <div style={{ margin: '0 auto', maxWidth: 800, textAlign: 'center' }}>
-        <Typography variant="h4" gutterBottom>
-          Ramas Inscritas
-        </Typography>
-        {loading ? (
-          <Typography>Cargando...</Typography>
-        ) : (
-          ramasDeportivas && ramasDeportivas.length > 0 ? (
-            <div style={{ height: 400, width: '100%' }}>
-              <DataGrid
-                rows={ramasDeportivas.map((rama, index) => ({ id: index + 1, nombre: rama.nombre, entrenador: rama.entrenador }))}
+        <div>
+            <h2>Ramas Inscritas</h2>
+            <DataTable
                 columns={columns}
-                pageSize={5}
-                disableSelectionOnClick
-              />
-            </div>
-          ) : (
-            <Typography>No se encontraron ramas deportivas inscritas.</Typography>
-          )
-        )}
-
-        <VerHorario
-          onRef={(ref) => (this.verHorarioComponent = ref)}
-        />
-      </div>
+                data={ramasInscritas}
+                pagination
+                highlightOnHover
+            />
+            <VerHorario
+                isOpen={modalIsOpen}
+                closeModal={closeModal}
+                selectedRama={selectedRama}
+            />
+        </div>
     );
-  }
-}
+};
 
-export default VerRamaInscrita;
+export default VerRamaInscritas;

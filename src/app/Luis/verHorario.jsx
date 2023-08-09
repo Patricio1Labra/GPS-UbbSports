@@ -1,46 +1,22 @@
-import React, { Component } from 'react';
-import { Typography, Modal } from '@mui/material';
-import Button from '@mui/material/Button';
+import React from 'react';
+import Modal from 'react-modal';
 
-class VerHorario extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      showModal: false,
-      nombreRama: '',
-      entrenadorRama: '',
-    };
-  }
-
-  componentDidMount() {
-    this.props.onRef(this);
-  }
-
-  handleOpenModal = (nombreRama, entrenadorRama) => {
-    this.setState({ showModal: true, nombreRama, entrenadorRama });
-  };
-
-  handleCloseModal = () => {
-    this.setState({ showModal: false });
-  };
-
-  render() {
-    const { showModal, nombreRama, entrenadorRama } = this.state;
-
+const VerHorario = ({ isOpen, closeModal, selectedRama }) => {
     return (
-      <div>
-        <Modal open={showModal} onClose={this.handleCloseModal}>
-          <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', backgroundColor: 'white', padding: '20px', minWidth: '300px' }}>
-            {/* Contenido del modal */}
-            <Typography variant="h6" style={{ marginBottom: '10px' }}>
-              {nombreRama}
-            </Typography>
-            <Typography>Entrenador: {entrenadorRama}</Typography>
-          </div>
+        <Modal isOpen={isOpen} onRequestClose={closeModal}>
+            {selectedRama && (
+                <div>
+                    <h2>{selectedRama.nombre}</h2>
+                    <p>Día: {selectedRama.horario.dia}</p>
+                    <p>Hora de Inicio: {selectedRama.horario.horaInicio}</p>
+                    <p>Hora de Salida: {selectedRama.horario.horaSalida}</p>
+                    <p>Recinto: {selectedRama.recinto}</p>
+                    <p>Entrenador: {selectedRama.entrenador}</p>
+                </div>
+            )}
+            <button onClick={closeModal}>Cerrar</button>
         </Modal>
-      </div>
     );
-  }
-}
+};
 
 export default VerHorario;
