@@ -60,6 +60,13 @@ const EntrenamientoSchema = new Schema({
   descripcion: String
 });
 
+const AsistenciaSchema = new Schema({
+  nombreAlumno: String,
+  estado: Boolean,
+  horaEntrada: Date,
+  horaSalida: Date
+});
+
 // Esquema para Encargado
 const EncargadoSchema = new Schema({
   nombre: String,
@@ -105,6 +112,7 @@ const Entrenamiento = mongoose.model('Entrenamiento', EntrenamientoSchema);
 const Encargado = mongoose.model('Encargado', EncargadoSchema);
 const RamaDeportiva = mongoose.model('RamaDeportiva', RamaDeportivaSchema);
 const Recursos = mongoose.model('Recursos', RecursosSchema);
+const Asistencia = mongoose.model('Asistencia', AsistenciaSchema);
 
 // Exportar los modelos
 module.exports = {
@@ -115,5 +123,6 @@ module.exports = {
   Entrenamiento,
   Encargado,
   RamaDeportiva,
-  Recursos
+  Recursos,
+  Asistencia
 };

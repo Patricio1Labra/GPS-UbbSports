@@ -7,9 +7,10 @@ function EditarEntrenamiento() {
   const { id } = useParams();
   const [entrenamientos, setEntrenamientos] = useState([]);
   const [selectedEntrenamiento, setSelectedEntrenamiento] = useState(null);
-
-  
-  // Cargar los datos de la base de datos al montar el componente
+  const [nuevaFecha, setNuevaFecha] = useState('');
+  const [nuevaHoraInicio, setNuevaHoraInicio] = useState('');
+  const [nuevaHoraFin, setNuevaHoraFin] = useState('');
+  const [nuevaDescripcion, setNuevaDescripcion] = useState('');
 
   useEffect(() => {
     async function fetchEntrenamientos() {
@@ -27,8 +28,22 @@ function EditarEntrenamiento() {
   const handleEntrenamientoChange = (e) => {
     const entrenamientoId = parseInt(e.target.value);
     const selected = entrenamientos.find((entrenamiento) => entrenamiento.id === entrenamientoId);
-    setSelectedEntrenamiento(selected);
+
+    if (selected) {
+      setSelectedEntrenamiento(selected);
+      setNuevaFecha(selected.asistencia.fecha || '');
+      setNuevaHoraInicio(selected.horaEntrada || '');
+      setNuevaHoraFin(selected.horaSalida || '');
+      setNuevaDescripcion(selected.descripcion || '');
+    } else {
+      setSelectedEntrenamiento(null);
+      setNuevaFecha('');
+      setNuevaHoraInicio('');
+      setNuevaHoraFin('');
+      setNuevaDescripcion('');
+    }
   };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -37,7 +52,27 @@ function EditarEntrenamiento() {
     }
 
     try {
-      await axios.put(`/api/actualizarEntrenamiento/${selectedEntrenamiento.id}`, selectedEntrenamiento);
+      const datosActualizados = {
+        asistencia: {
+          fecha: nuevaFecha,
+          estado: selectedEntrenamiento.asistencia.estado,
+        },
+        horaEntrada: nuevaHoraInicio,
+        horaSalida: nuevaHoraFin,
+        descripcion: nuevaDescripcion,
+      };
+
+      await axios.put(`/api/actualizarEntrenamiento/${selectedEntrenamiento.id}`, datosActualizados);
+
+      const response = await axios.get(`/api/obtenerEntrenamientosPorRama/${id}`);
+      setEntrenamientos(response.data);
+
+      setSelectedEntrenamiento(null);
+      setNuevaFecha('');
+      setNuevaHoraInicio('');
+      setNuevaHoraFin('');
+      setNuevaDescripcion('');
+
       // Puedes mostrar una alerta de éxito aquí si lo deseas
     } catch (error) {
       console.error('Error al actualizar el Entrenamiento:', error);
@@ -56,11 +91,15 @@ function EditarEntrenamiento() {
             value={selectedEntrenamiento ? selectedEntrenamiento.id : ''}
           >
             <option value="">Seleccione un Entrenamiento</option>
-            {entrenamientos.map((entrenamiento) => (
-  <           option key={entrenamiento.id} value={entrenamiento.id}>
-                {`Dia: ${entrenamiento.asistencia.fecha}, Hora Inicio: ${entrenamiento.horaEntrada}, Hora Fin: ${entrenamiento.horaSalida}`}
-              </option>
-            ))}
+            {Array.isArray(entrenamientos) ? (
+              entrenamientos.map((entrenamiento) => (
+                <option key={entrenamiento.id} value={entrenamiento.id}>
+                  {`Dia: ${entrenamiento.asistencia.fecha}, Hora Inicio: ${entrenamiento.horaEntrada}, Hora Fin: ${entrenamiento.horaSalida}`}
+                </option>
+              ))
+            ) : (
+              <option value="">No hay entrenamientos disponibles</option>
+            )}
           </select>
         </label>
       </div>
@@ -69,32 +108,34 @@ function EditarEntrenamiento() {
           <h3>Editar Entrenamiento</h3>
           <form onSubmit={handleSubmit}>
             <label>
+              Nueva Fecha:
+              <input
+                type="date"
+                value={nuevaFecha}
+                onChange={(e) => setNuevaFecha(e.target.value)}
+              />
+            </label>
+            <label>
               Nueva hora de inicio:
               <input
                 type="time"
-                value={selectedEntrenamiento.horaEntrada}
-                onChange={(e) =>
-                  setSelectedEntrenamiento({ ...selectedEntrenamiento, horaEntrada: e.target.value })
-                }
+                value={nuevaHoraInicio}
+                onChange={(e) => setNuevaHoraInicio(e.target.value)}
               />
             </label>
             <label>
               Nueva hora de fin:
               <input
                 type="time"
-                value={selectedEntrenamiento.horaSalida}
-                onChange={(e) =>
-                  setSelectedEntrenamiento({ ...selectedEntrenamiento, horaSalida: e.target.value })
-                }
+                value={nuevaHoraFin}
+                onChange={(e) => setNuevaHoraFin(e.target.value)}
               />
             </label>
             <label>
               Nueva descripción:
               <textarea
-                value={selectedEntrenamiento.descripcion}
-                onChange={(e) =>
-                  setSelectedEntrenamiento({ ...selectedEntrenamiento, descripcion: e.target.value })
-                }
+                value={nuevaDescripcion}
+                onChange={(e) => setNuevaDescripcion(e.target.value)}
               />
             </label>
             <button type="submit">Guardar cambios</button>

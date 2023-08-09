@@ -31,9 +31,6 @@ function VerRama() {
               <h2>{rama.nombre}</h2>
               <p>{rama.descripcion}</p>
               <div className="course-buttons">
-                <Link to={`/asistencia/${rama.nombre}`}>
-                  <button>Asistencia</button>
-                </Link>
                 <Link to={`/crear-entrenamiento/${rama.nombre}`}>
                   <button>Crear Entrenamiento</button>
                 </Link>

@@ -3,6 +3,7 @@ const router = express.Router();
 const { Entrenamiento } = require('../models/modelo');
 const { Estudiante } = require('../models/modelo');
 const { RamaDeportiva } = require('../models/modelo');
+const { Asistencia } = require('../models/modelo');
 const moment = require('moment'); // Importa el paquete moment
 
 
@@ -33,22 +34,6 @@ router.post('/crearEntrenamientos/:idCurso', async (req, res) => {
   }
 });
 
-router.put('/actualizarEntrenamiento/:id', async (req, res) => {
-  try {
-    const idEntrenamiento = req.params.id;
-    const datosActualizados = req.body;
-    const entrenamientoActualizado = await Entrenamiento.findByIdAndUpdate(
-      idEntrenamiento,
-      { $set: datosActualizados },
-      { new: true }
-    );
-    res.json(entrenamientoActualizado);
-  } catch (error) {
-    console.error('Error al actualizar el entrenamiento:', error);
-    res.status(500).json({ error: 'Error al actualizar el entrenamiento' });
-  }
-});
-
 
 
 router.get('/obtenerRamas', async (req, res) => {
@@ -61,16 +46,66 @@ router.get('/obtenerRamas', async (req, res) => {
   }
 });
 
-router.get('/obtenerEntrenamientosPorRama/:idRama', async (req, res) => {
+router.get('/obtenerEntrenamientosPorRama/:nombreRama', async (req, res) => {
+  const { nombreRama } = req.params;
+
   try {
-    const idRama = req.params.idRama;
-    const entrenamientos = await Entrenamiento.find({ nombreRama: idRama });
+    const entrenamientos = await Entrenamiento.find({ nombreRama });
     res.json(entrenamientos);
   } catch (error) {
-    console.error('Error al obtener los entrenamientos por rama:', error);
-    res.status(500).json({ error: 'Error al obtener los entrenamientos por rama' });
+    console.error('Error al obtener entrenamientos:', error);
+    res.status(500).json({ error: 'Error al obtener entrenamientos' });
   }
 });
+
+// Actualizar entrenamiento
+router.put('/actualizarEntrenamiento/:entrenamientoId', async (req, res) => {
+  const { entrenamientoId } = req.params;
+  const datosActualizados = req.body;
+
+  try {
+    const entrenamientoActualizado = await Entrenamiento.findByIdAndUpdate(
+      entrenamientoId,
+      datosActualizados,
+      { new: true }
+    );
+    res.json(entrenamientoActualizado);
+  } catch (error) {
+    console.error('Error al actualizar el entrenamiento:', error);
+    res.status(500).json({ error: 'Error al actualizar el entrenamiento' });
+  }
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 router.get('/entrenamientos/:ramaNombre', async (req, res) => {
@@ -82,6 +117,41 @@ router.get('/entrenamientos/:ramaNombre', async (req, res) => {
     res.status(500).json({ error: 'Error al obtener los entrenamientos.' });
   }
 });
+
+router.put('/actualizarAsistencia/:entrenamientoId', async (req, res) => {
+  const entrenamientoId = req.params.entrenamientoId;
+  const nuevaAsistencia = req.body.asistencia;
+
+  try {
+    const { entrenamientoId, asistencia } = req.body;
+
+    // Encuentra el entrenamiento por ID
+    const entrenamiento = await Entrenamiento.findById(entrenamientoId);
+
+    if (!entrenamiento) {
+      return res.status(404).json({ error: 'Entrenamiento no encontrado.' });
+    }
+
+    // Crea la asistencia en el entrenamiento
+    entrenamiento.asistencia = asistencia;
+
+    // Guarda los cambios en el entrenamiento
+    await entrenamiento.save();
+
+    // Crea las entradas individuales de asistencia en la colección de Asistencia
+    for (const alumnoId in asistencia) {
+      await Asistencia.create({
+        nombreAlumno: alumnoId,
+        estado: true,
+      });
+    }
+
+    res.json({ message: 'Asistencia registrada exitosamente.' });
+  } catch (error) {
+    res.status(500).json({ error: 'Error al registrar la asistencia.' });
+  }
+});
+
 
 // Guardar asistencia
 router.post('/asistencia', async (req, res) => {
@@ -109,34 +179,15 @@ router.post('/asistencia', async (req, res) => {
   }
 });
 
-
-
-
-router.post('/inscripciones', async (req, res) => {
+router.get('/alumnos', async (req, res) => {
   try {
-    const datosInscripcion = req.body;
-
-    // Crea una nueva instancia del modelo RamaDeportiva con los datos recibidos
-    const nuevaRamaDeportiva = new RamaDeportiva({
-      alumnos: [], 
-      nombre: datosInscripcion.nombre,
-      descripcion: datosInscripcion.espacioDeportivo, 
-      entrenador: datosInscripcion.profe,
-      horario: `${datosInscripcion.horarioDia} ${datosInscripcion.horarioInicio}`,
-      cupos: datosInscripcion.cupos,
-      asistencia: [],
-      recinto: datosInscripcion.espacioDeportivo, 
-      entrenamiento: datosInscripcion.descripcion, 
-    });
-
-    await nuevaRamaDeportiva.save();
-
-    res.status(201).json({ message: 'Inscripción realizada con éxito' });
+    const alumnos = await Estudiante.find();
+    res.json(alumnos);
   } catch (error) {
-    console.error('Error al enviar la inscripción:', error);
-    res.status(500).json({ error: 'Error interno del servidor' });
+    res.status(500).json({ error: 'Error al obtener los alumnos.' });
   }
 });
+
 
 
 module.exports = router;
