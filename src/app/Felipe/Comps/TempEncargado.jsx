@@ -17,7 +17,7 @@ import LibraryAddOutlinedIcon from '@mui/icons-material/LibraryAddOutlined';
 import RequestPageOutlinedIcon from '@mui/icons-material/RequestPageOutlined';
 import '../Home.css'
 import { Link } from 'react-router-dom';
-import VerSolicitudesImplemento from '../Vistas/VerSolicitudesImplemento.jsx';
+
 
 export function TempEncargado() {
   const [state, setState] = React.useState({

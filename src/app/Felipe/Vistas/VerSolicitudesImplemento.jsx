@@ -151,7 +151,6 @@ const handleLogout = () => {
             color="primary"
             onClick={() => handleAceptarSolicitud(solicitud)}
             style={{ marginRight: '10px' }}
-            disabled={botonesDeshabilitados[index]}
             >
               Aceptar
             </Button>
@@ -159,7 +158,7 @@ const handleLogout = () => {
                 color="secondary"
                 onClick={() => handleRechazarSolicitud(solicitud)}
                 style={{ marginLeft: '10px' }}
-                disabled={botonesDeshabilitados[index]}>
+                >
               Rechazar
             </Button>
             <hr style={{ width: '20%', margin: '10px auto' }} />
