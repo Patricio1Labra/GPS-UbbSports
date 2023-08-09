@@ -21,7 +21,14 @@ const SolicitudImplementosSchema = new Schema({
   fechadesolicitud: Date,
   estadosolicitud: String
 });
-
+const SolicitudRecintoSchema = new Schema({
+  motivo: String,
+  estudiante: String,
+  fechadesolicitud: Date,
+  fechaparausar: Date,
+  estadosolicitud: String,
+  RecintoDeportivo: String
+});
 // Esquema para Estudiante
 const EstudianteSchema = new Schema({
   nombre: String,
@@ -92,6 +99,7 @@ const RecursosSchema = new Schema({
 // Modelos basados en los esquemas
 const Entrenador = mongoose.model('Entrenador', EntrenadorSchema);
 const SolicitudImplementos = mongoose.model('SolicitudImplementos', SolicitudImplementosSchema);
+const SolicitudRecinto = mongoose.model('SolicitudRecinto', SolicitudRecintoSchema);
 const Estudiante = mongoose.model('Estudiante', EstudianteSchema);
 const RecintoDeportivo = mongoose.model('RecintoDeportivo', RecintoDeportivoSchema);
 const Entrenamiento = mongoose.model('Entrenamiento', EntrenamientoSchema);
@@ -103,6 +111,7 @@ const Recursos = mongoose.model('Recursos', RecursosSchema);
 module.exports = {
   Entrenador,
   SolicitudImplementos,
+  SolicitudRecinto,
   Estudiante,
   RecintoDeportivo,
   Entrenamiento,
