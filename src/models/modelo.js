@@ -12,6 +12,10 @@ const EntrenadorSchema = new Schema({
   descripcion: String,
   contraseña: String
 });
+const tipoEspacioSchema = new Schema({
+  nombre: String,
+  descripcion: String,
+});
 
 // Esquema para Solicitud de Implementos
 const SolicitudImplementosSchema = new Schema({
@@ -127,6 +131,7 @@ const Encargado = mongoose.model('Encargado', EncargadoSchema);
 const RamaDeportiva = mongoose.model('RamaDeportiva', RamaDeportivaSchema);
 const Recursos = mongoose.model('Recursos', RecursosSchema);
 const Asistencia = mongoose.model('Asistencia', AsistenciaSchema);
+const TipoEspacio = mongoose.model('TipoEspacio', tipoEspacioSchema);
 
 // Exportar los modelos
 module.exports = {
@@ -139,5 +144,6 @@ module.exports = {
   Encargado,
   RamaDeportiva,
   Recursos,
-  Asistencia
+  Asistencia,
+  TipoEspacio
 };

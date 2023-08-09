@@ -16,6 +16,7 @@ const CrearEspacioDeportivo = ({ user, setUser }) => {
     const [nombre, setNombre] = useState('');
     const [tipo, setTipo] = useState('');
     const [redirecting, setRedirecting] = useState(false);
+    const [tipos, setTipos] = useState([]);
     const navigate = useNavigate();
     const handleLogout = () => {
         setUser([]); // Reset user state
@@ -26,6 +27,17 @@ const CrearEspacioDeportivo = ({ user, setUser }) => {
     const handleMenuClick = () => {
         setMenuOpen(!menuOpen);
     };
+    useEffect(() => {
+        async function fetchTipos() {
+            try {
+                const response = await axios.get('/api/tipos');
+                setTipos(response.data);
+            } catch (error) {
+                console.error('Error al obtener los tipos de espacios', error);
+            }
+        }
+        fetchTipos();
+    }, []);
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -113,15 +125,21 @@ const CrearEspacioDeportivo = ({ user, setUser }) => {
                                 />
                             </div>
                             <div className="mb-3">
-                                <label htmlFor="tipo" className="form-label">Tipo de Espacio</label>
-                                <input
-                                    type="text"
-                                    className="form-control"
-                                    id="tipo"
-                                    value={tipo}
-                                    onChange={(e) => setTipo(e.target.value)}
-                                />
-                            </div>
+            <label htmlFor="tipo" className="form-label">Tipo de Espacio</label>
+            <select
+                className="form-select"
+                id="tipo"
+                value={tipo}
+                onChange={(e) => setTipo(e.target.value)}
+            >
+                <option value="">Selecciona un tipo</option>
+                {tipos.map(tipo => (
+                    <option key={tipo._id} value={tipo.nombre}>
+                        {tipo.nombre}
+                    </option>
+                ))}
+            </select>
+        </div>
                             <div className="row justify-content-center">
                                 <button type="submit" className="btn btn-success col-md-3">Crear Espacio</button>
                             </div>

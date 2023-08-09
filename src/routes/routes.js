@@ -4,7 +4,7 @@ const { Estudiante } = require('../models/modelo');
 const { Encargado } = require('../models/modelo');
 const { Entrenador } = require('../models/modelo');
 const { SolicitudImplementos, RecintoDeportivo, SolicitudRecinto } = require('../models/modelo');
-const { RamaDeportiva } = require('../models/modelo');
+const { RamaDeportiva, TipoEspacio } = require('../models/modelo');
 const { Asistencia } = require('../models/modelo');
 const moment = require('moment'); // Importa el paquete moment
 
@@ -82,6 +82,29 @@ router.get('/recintosDeportivos', async (req, res) => {
 
 
 ////////////////////////////////////////pipe y jorge////////////////////////////////////////////////////////////////  
+
+router.get('/tipos', async (req, res) => {
+    try {
+        const tipos = await TipoEspacio.find();
+        res.json(tipos);
+    } catch (error) {
+        res.status(500).json({ error: 'Error al obtener los tipos de espacios' });
+    }
+});
+
+// Ruta para agregar un nuevo tipo de espacio
+router.post('/tipos', async (req, res) => {
+    try {
+        const { nombre, descripcion } = req.body;
+        const nuevoTipo = new TipoEspacio({ nombre, descripcion });
+        await nuevoTipo.save();
+        res.status(201).json({ message: 'Tipo de espacio creado exitosamente' });
+    } catch (error) {
+        res.status(500).json({ error: 'Error al crear el tipo de espacio' });
+    }
+});
+
+module.exports = router;
 
 router.post('/crear', async (req, res) => {
     const { nombre, tipo } = req.body;
