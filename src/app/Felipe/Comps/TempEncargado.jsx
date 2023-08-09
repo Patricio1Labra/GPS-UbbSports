@@ -18,7 +18,6 @@ import RequestPageOutlinedIcon from '@mui/icons-material/RequestPageOutlined';
 import '../Home.css'
 import { Link } from 'react-router-dom';
 
-
 export function TempEncargado() {
   const [state, setState] = React.useState({
     top: false,
@@ -34,37 +33,26 @@ export function TempEncargado() {
 
     setState({ ...state, [anchor]: open });
   };
-
+  const menuItems = [
+    { text: 'Nueva Rama', icon: <AddBoxIcon />, path: '/crear-rama' },
+    { text: 'Editar Rama', icon: <ModeEditIcon />, path: '/editar-rama' },
+    { text: 'Nuevo Recinto Deportivo', icon: <PlaylistAddOutlinedIcon />, path: '/crear-espacio' },
+    { text: 'Solicitudes de Recursos', icon: <RequestPageOutlinedIcon />, path: '/home-encargado' },
+    { text: 'Ver Solicitudes de Recintos Deportivos', icon: <LibraryAddOutlinedIcon />, path: '/ver-espacio' },
+    { text: 'Ver Solicitudes de Implemento', icon: <RemoveRedEyeOutlinedIcon />, path: '/home-encargado' }
+  ];
   const list = (anchor) => (
     <Box
       sx={{ width: anchor === 'top' || anchor === 'bottom' ? 'auto' : 250 }}
       role="presentation"
-      onClick={toggleDrawer(anchor, false)}
-      onKeyDown={toggleDrawer(anchor, false)}
+      onClick={() => toggleDrawer(anchor, false)}
+      onKeyDown={() => toggleDrawer(anchor, false)}
     >
       <List>
-        {['Nueva Rama', 'Editar Rama', 'Nuevo Recinto Deportivo', 'Solicitudes de Recursos'].map((text, index) => (
+        {menuItems.map(({ text, icon, path }) => (
           <ListItem key={text} disablePadding>
-            <ListItemButton component={index === 2 ? Link : 'button'} to="/crear-espacio" >
-              <ListItemIcon>
-              {index % 4 === 0 ? <AddBoxIcon /> :
-                index % 4 === 1 ? <ModeEditIcon /> :
-                index % 4 === 2 ? <PlaylistAddOutlinedIcon /> :
-                index % 4 === 3 ? <RequestPageOutlinedIcon /> : null}
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItemButton>
-          </ListItem>
-        ))}
-      </List>
-      <Divider />
-      <List>
-        {['Ver Solicitudes de Recintos Deportivos', 'Ver Solicitudes de Implemento'].map((text, index) => (
-          <ListItem key={text} disablePadding>
-            <ListItemButton component={Link} to={index === 0 ? '/ver-espacio' : '/ver-solicitudes-implemento'}>
-              <ListItemIcon>
-                {index % 2 === 0 ? <LibraryAddOutlinedIcon /> : <RemoveRedEyeOutlinedIcon />}
-              </ListItemIcon>
+            <ListItemButton component={Link} to={path}>
+              <ListItemIcon>{icon}</ListItemIcon>
               <ListItemText primary={text} />
             </ListItemButton>
           </ListItem>
@@ -78,7 +66,7 @@ export function TempEncargado() {
       {['left'].map((anchor) => (
         <React.Fragment key={anchor}>
           <Button onClick={toggleDrawer(anchor, true)}>
-            <MenuIcon className='menu' style={{color: 'white'}}/>
+            <MenuIcon className='menu' style={{ color: 'white' }} />
           </Button>
           <Drawer
             anchor={anchor}

@@ -4,17 +4,19 @@ import { Formulario } from './Felipe/Formulario.jsx';
 import { Home } from './Felipe/Home.jsx';
 import { HomeEncargado } from './Felipe/HomeEncargado.jsx';
 import { HomeEntrenador } from './Felipe/HomeEntrenador.jsx';
-import { VerSolicitudesImplemento } from './Felipe/Vistas/VerSolicitudesImplemento.jsx'; 
+import { VerSolicitudesImplemento } from './Felipe/Vistas/VerSolicitudesImplemento.jsx';
 import Crear from './Jorge/CrearEspacio.jsx';
 import Pedir from './Jorge/PedirEspacio.jsx';
 import Ver from './Jorge/VerSolicitudes.jsx';
+import InscribirRama from './Leo/inscribir.jsx';
+import ModificarRama from './Leo/modificar.jsx'
 // Importa otros componentes y dependencias necesarias
 
 function App() {
   const storedUser = JSON.parse(localStorage.getItem('user'));
   const [user, setUser] = useState(storedUser || []);
 
- return (
+  return (
     <BrowserRouter>
       <Routes>
         <Route
@@ -35,11 +37,19 @@ function App() {
         />
         <Route
           path="/ver-solicitudes-implemento"
-          element={<VerSolicitudesImplemento user={user} setUser={setUser}/>}
+          element={<VerSolicitudesImplemento user={user} setUser={setUser} />}
         />
         <Route path="/crear-espacio" element={<Crear user={user} setUser={setUser} />} />
-                <Route path="/pedir-espacio" element={<Pedir user={user} setUser={setUser} />} />
-                <Route path="/ver-espacio" element={<Ver user={user} setUser={setUser} />} />
+        <Route path="/pedir-espacio" element={<Pedir user={user} setUser={setUser} />} />
+        <Route path="/ver-espacio" element={<Ver user={user} setUser={setUser} />} />
+
+
+        <Route path="/crear-rama" element={<InscribirRama user={user} setUser={setUser} />} />
+        <Route path="/editar-rama" element={<ModificarRama user={user} setUser={setUser} />} />
+
+
+
+
       </Routes>
     </BrowserRouter>
   );
