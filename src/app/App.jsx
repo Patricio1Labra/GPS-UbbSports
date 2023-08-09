@@ -17,6 +17,7 @@ import VerRamaInscritas from './Luis/verRamaInscritas.jsx';
 import VerRama from './andres/verRama.jsx';
 import CrearEntrenamiento from './andres/crearEntrenamiento.jsx';
 import EditarEntrenamiento from './andres/planificacion.jsx';
+import { Home1 } from './Patricio/Home.jsx';
 // Importa otros componentes y dependencias necesarias
 
 function App() {
@@ -64,7 +65,10 @@ function App() {
         <Route path="/editar-entrenamiento/:id" element={<EditarEntrenamiento user={user} setUser={setUser} />} />
         <Route path="/ver-rama" element={<VerRama user={user} setUser={setUser} />} />
 
-
+        <Route
+          path="/ramas"
+          element={<Home1 user={user} setUser={setUser} />}
+        />
 
 
 

@@ -32,7 +32,7 @@ export function TemporaryDrawer() {
     setState({ ...state, [anchor]: open });
   };
   const links = [
-    { text: 'Ver Ramas', path: '/home', icon: <LibraryBooksIcon /> },
+    { text: 'Ver Ramas', path: '/ramas', icon: <LibraryBooksIcon /> },
     { text: 'Ver Horario', path: '/home', icon: <CalendarMonthIcon /> },
     { text: 'Pedir Recinto Deportivo', path: '/pedir-espacio', icon: <SportsBasketballIcon /> },
     { text: 'Solicitar Recursos', path: '/home', icon: <SportsCricketIcon /> },
