@@ -18,34 +18,25 @@ const GestionarSolicitudesRecursos = () => {
         }
     };
 
-    const handleRechazar = async (index) => {
-        const updatedSolicitudes = [...solicitudesRecursos];
-        const solicitud = updatedSolicitudes[index];
-    
-        solicitud.estadoSolicitud = 'Rechazada';
-        setSolicitudesRecursos(updatedSolicitudes);
-    
+    const handleAprobar = async (solicitudId) => {
         try {
-            await axios.put(`/api/recursos/${solicitud._id}`, solicitud);
+            await axios.put(`/api/recursos/${solicitudId}`, { estadoSolicitud: "Aprobada" });
+            fetchSolicitudesRecursos();
         } catch (error) {
-            console.error('Error cambiando el estado de la solicitud', error);
+            console.error('Error al cambiar el estado de la solicitud', error);
         }
     };
 
-    const handleAceptar = async (index) => {
-        const updatedSolicitudes = [...solicitudesRecursos];
-        const solicitud = updatedSolicitudes[index];
-    
-        solicitud.estadoSolicitud = 'Aceptada';
-        setSolicitudesRecursos(updatedSolicitudes);
-    
+    const handleRechazar = async (solicitudId) => {
         try {
-            await axios.put(`/api/recursos/${solicitud._id}`, solicitud);
+            await axios.put(`/api/recursos/${solicitudId}`, { estadoSolicitud: "Rezachada" });
+            fetchSolicitudesRecursos();
         } catch (error) {
-            console.error('Error cambiando el estado de la solicitud', error);
+            console.error('Error al cambiar el estado de la solicitud', error);
         }
     };
-
+    
+    
     return (
         <div className="container mt-5">
             <h2>Gestionar Solicitudes de Recursos</h2>
@@ -71,18 +62,20 @@ const GestionarSolicitudesRecursos = () => {
                             <td>{solicitud.participantes.join(', ')}</td>
                             <td>{solicitud.estadoSolicitud}</td>
                             <td>
-                                <button
-                                    className="btn btn-success"
-                                    onClick={() => handleAceptar(index)}
->
-                                    Aceptar
-                                </button>
-                                <button
-                                    className="btn btn-danger"
-                                    onClick={() => handleRechazar(index)}
-                                >
-                                    Rechazar
-                                </button>
+                                <div>
+                                    <button
+                                        className="btn btn-success mr-2"
+                                        onClick={() => handleAprobar(solicitud._id, 'aprobado')}
+                                        >
+                                        Aprobar
+                                    </button>
+                                    <button
+                                        className="btn btn-danger"
+                                        onClick={() => handleRechazar(solicitud._id, 'rechazado')}
+                                    >
+                                        Rechazar
+                                    </button>
+                                </div>
                             </td>
                         </tr>
                     ))}

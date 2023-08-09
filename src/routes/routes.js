@@ -105,18 +105,19 @@ router.get('/recursos', async (req, res) => {
 router.put('/recursos/:id', async (req, res) => {
     try {
         const solicitudId = req.params.id;
-        const nuevoEstado = req.body.estadosolicitud;
-  
-        const solicitudActualizada = await Recursos.findByIdAndUpdate(
-            solicitudId,
-            { $set: { estadosolicitud: nuevoEstado } },
-            { new: true }
-        );
-  
-        res.json(solicitudActualizada);
+        const nuevoEstado = req.body.estadoSolicitud;
+
+        // Actualizar el estado de la solicitud en la base de datos
+        const actualizacion = await Recursos.findByIdAndUpdate(solicitudId, { estadoSolicitud: nuevoEstado }, { new: true });
+
+        if (!actualizacion) {
+            return res.status(404).json({ error: 'Solicitud no encontrada' });
+        }
+
+        res.status(200).json(actualizacion);
     } catch (error) {
-        console.error('Error al actualizar el estado de la solicitud de recursos', error);
-        res.status(500).json({ error: 'Error al actualizar el estado de la solicitud de recursos' });
+        console.error('Error al cambiar el estado de la solicitud', error);
+        res.status(500).json({ error: 'Error al cambiar el estado de la solicitud' });
     }
 });
 
