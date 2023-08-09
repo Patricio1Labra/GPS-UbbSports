@@ -6,14 +6,15 @@ const CrearSolicitudImplementos = () => {
     const [nombre, setNombre] = useState('');
     const [descripcion, setDescripcion] = useState('');
     const [cantidad, setCantidad] = useState(0);
-    const [fechadesolicitud, setFechaDeSolicitud] = useState("");
-    const [estadosolicitud, setEstadoSolicitud] = useState('');
     
 
     const handleSubmit = async (event) => {
         event.preventDefault();
         try {
-            await axios.post('/api/solicitudesImplementos', { nombre, descripcion, cantidad, fechadesolicitud, estadosolicitud });
+            const estadosolicitud= "Pendiente";
+            const fechadesolicitud = new Date();
+            
+            await axios.post('/api/solicitudImplementos', { nombre, descripcion, cantidad, fechadesolicitud, estadosolicitud });
             console.log('Solicitud de implementos creada exitosamente');
         } catch (error) {
             console.error('Error al crear la solicitud de implementos', error);
@@ -56,28 +57,7 @@ const CrearSolicitudImplementos = () => {
                                 onChange={(e) => setCantidad(e.target.value)}
                             />
                         </div>
-                        
-                        <div className="mb-3">
-                            <label htmlFor="fechadesolicitud" className="form-label">Fecha en la que se solicita</label>
-                            <input
-                                type="date"
-                                className="form-control"
-                                id="fechadesolicitud"
-                                value={fechadesolicitud}
-                                onChange={(e) => setFechaDeSolicitud(e.target.value)}
-                            />
-                        </div>
-                        <div className="mb-3">  
-                            <label htmlFor="estadosolicitud" className="form-label">Estado de la solicitud</label>
-                            <input
-                                type="text"
-                                className="form-control"
-                                id="estadosolicitud"
-                                value={estadosolicitud}
-                                onChange={(e) => setEstadoSolicitud(e.target.value)}
-                            />
-                        </div>
-                        <button type="submit" className="btn btn-dark"  style={{ backgroundColor: '#007bff' }}>Crear solicitud de recursos</button>
+                        <button type="submit" className="btn btn-dark"  style={{ backgroundColor: '#007bff' }}>Enviar solicitud de implementos</button>
                     </form>
                 </div>
             </div>

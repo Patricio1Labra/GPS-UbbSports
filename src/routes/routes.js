@@ -1,13 +1,14 @@
 const express = require('express');
 const router = express.Router();
-const Prueba = require('../models/modelo');
+const {SolicitudImplementos,Recursos} = require('../models/modelo');
 
-router.post('/solicitudesImplementos', async (req, res) => {
-    const { nombre, descripcion, cantidad, fechadesolicitud, estadosolicitud } = req.body;
-
+router.post('/solicitudImplementos', async (req, res) => {
+    const { nombre, descripcion, cantidad } = req.body;
+    const estadosolicitud= "Pendiente";
+    const fechadesolicitud= new Date();
     try {
         // Validar campos requeridos
-        if (!nombre || !descripcion || !cantidad || !fechadesolicitud) {
+        if (!nombre || !descripcion || !cantidad) {
             return res.status(400).json({ error: 'Faltan campos obligatorios en la solicitud' });
         }
 
@@ -16,12 +17,9 @@ router.post('/solicitudesImplementos', async (req, res) => {
         return res.status(400).json({ error: 'El campo "cantidad" debe ser mayor que cero' });
         }
 
-        // Validar longitud de texto para nombre y estadosolicitud
+        // Validar longitud de texto para nombre 
         if (nombre.length < 3 || nombre.length > 50) {
             return res.status(400).json({ error: 'El campo "nombre" debe tener entre 3 y 50 caracteres' });
-        }
-        if (estadosolicitud.length > 100) {
-            return res.status(400).json({ error: 'El campo "estadosolicitud" no puede exceder los 100 caracteres' });
         }
 
         // Validar que fechadesolicitud sea una fecha válida
@@ -30,15 +28,16 @@ router.post('/solicitudesImplementos', async (req, res) => {
         }
         
         // Crear una nueva instancia del modelo de solicitud con los datos recibidos
-        const SolicitudImplementos = new SolicitudImplementos({
+        const Solicitudimplementos = new SolicitudImplementos({
             nombre,
             descripcion,
             cantidad,
             fechadesolicitud,
-            estadosolicitud
+            estadosolicitud: estadosolicitud
         });
+        
         // Guardar la solicitud en la base de datos
-        await SolicitudImplementos.save();
+        await Solicitudimplementos.save();
         console.log('Solicitud de implementos creada exitosamente');
         res.status(201).json({ message: 'Solicitud de implementos creada exitosamente' });
     } catch (error) {
@@ -47,9 +46,9 @@ router.post('/solicitudesImplementos', async (req, res) => {
     }
 });
 
-router.post('/solicitudesRecursos', async (req, res) => {
-    const { nombreSolicitante, monto, descripciondeSolicitud, ramaSolicitante, participantes, estadoSolicitud } = req.body;
-
+router.post('/recursos', async (req, res) => {
+    const { nombreSolicitante, monto, descripciondeSolicitud, ramaSolicitante, participantes} = req.body;
+    const estadoSolicitud= "Pendiente";
     try {
         // Validar campos requeridos y longitud de texto
         if (!nombreSolicitante || !monto || !descripciondeSolicitud || !ramaSolicitante || !participantes) {
@@ -68,17 +67,13 @@ router.post('/solicitudesRecursos', async (req, res) => {
             return res.status(400).json({ error: 'El campo "ramaSolicitante" debe tener entre 3 y 20 caracteres' });
         }
 
-        if (participantes.length <3 || participantes.length > 100) {
-            return res.status(400).json({ error: 'El campo "estadoSolicitud" debe tener entre 3 y 100 caracteres' });
-        }
-
         // Validar que monto sea mayor que cero
         if (monto <= 0) {
             return res.status(400).json({ error: 'El campo "monto" debe ser mayor que cero' });
         }
 
         // Crear una nueva instancia del modelo de recursos con los datos recibidos
-        const nuevaSolicitudRecursos = new Recursos({
+        const recursos = new Recursos({
             nombreSolicitante,
             monto,
             descripciondeSolicitud,
@@ -88,7 +83,7 @@ router.post('/solicitudesRecursos', async (req, res) => {
         });
 
         // Guardar la solicitud de recursos en la base de datos
-        await nuevaSolicitudRecursos.save();
+        await recursos.save();
         console.log('Solicitud de recursos creada exitosamente');
         res.status(201).json({ message: 'Solicitud de recursos creada exitosamente' });
     } catch (error) {
@@ -97,7 +92,7 @@ router.post('/solicitudesRecursos', async (req, res) => {
     }
 });
 
-router.get('/solicitudesRecursos', async (req, res) => {
+router.get('/recursos', async (req, res) => {
     try {
         const solicitudes = await Recursos.find(); // Obtener todas las solicitudes de la base de datos
         res.status(200).json(solicitudes);

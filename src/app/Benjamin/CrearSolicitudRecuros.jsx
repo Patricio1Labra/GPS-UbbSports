@@ -5,15 +5,16 @@ import axios from 'axios';
 const CrearSolicitudRecursos = () => {
     const [nombreSolicitante, setNombreSolicitante] = useState('');
     const [monto, setMonto] = useState(0);
-    const [descripcion, setDescripcion] = useState('');
+    const [descripciondeSolicitud, setDescripcion] = useState('');
     const [ramaSolicitante, setRamaSolicitante] = useState('');
     const [participantes, setParticipantes] = useState('');
-    const [estadoSolicitud, setEstadoSolicitud] = useState('Pendiente');
 
     const handleSubmit = async (event) => {
         event.preventDefault();
         try {
-            await axios.post('/api/solicitudesRecursos', { nombreSolicitante, monto, descripcion, ramaSolicitante, participantes, estadoSolicitud });
+            const estadoSolicitud= "Pendiente";
+
+            await axios.post('/api/recursos', { nombreSolicitante, monto, descripciondeSolicitud, ramaSolicitante, participantes, estadoSolicitud });
             console.log('Solicitud de recursos creada exitosamente');
         } catch (error) {
             console.error('Error al crear la solicitud de recursos', error);
@@ -52,7 +53,7 @@ const CrearSolicitudRecursos = () => {
                                 type="text"
                                 className="form-control"
                                 id="descripcion"
-                                value={descripcion}
+                                value={descripciondeSolicitud}
                                 onChange={(e) => setDescripcion(e.target.value)}
                             />
                         </div>
@@ -76,17 +77,7 @@ const CrearSolicitudRecursos = () => {
                                 onChange={(e) => setParticipantes(e.target.value)}
                             />
                         </div>
-                        <div className="mb-3">  
-                            <label htmlFor="estadosolicitud" className="form-label">Estado de la solicitud</label>
-                            <input
-                                type="text"
-                                className="form-control"
-                                id="estadosolicitud"
-                                value={estadoSolicitud}  
-                                onChange={(e) => setEstadoSolicitud(e.target.value)}
-                             />
-                        </div>
-                        <button type="submit" className="btn btn-dark"  style={{ backgroundColor: '#007bff' }}>Crear solicitud de recursos</button>
+                        <button type="submit" className="btn btn-dark"  style={{ backgroundColor: '#007bff' }}>Enviar solicitud de recursos</button>
                     </form>
                 </div>
             </div>

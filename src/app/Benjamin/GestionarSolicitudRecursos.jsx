@@ -11,7 +11,7 @@ const GestionarSolicitudesRecursos = () => {
 
     const fetchSolicitudesRecursos = async () => {
         try {
-            const response = await axios.get('/api/solicitudesRecursos');
+            const response = await axios.get('/api/recursos');
             setSolicitudesRecursos(response.data);
         } catch (error) {
             console.error('Error fetching solicitudesRecursos', error);
@@ -21,10 +21,9 @@ const GestionarSolicitudesRecursos = () => {
     const handleChangeEstado = async (index, nuevoEstado) => {
         const updatedSolicitudes = [...solicitudesRecursos];
         const solicitud = updatedSolicitudes[index];
-        solicitud.estadoSolicitud = nuevoEstado;
 
         try {
-            await axios.put(`/api/solicitudesRecursos/${solicitud.id}`, solicitud);
+            await axios.put(`/api/recursos/${solicitud.id}`, solicitud);
             setSolicitudesRecursos(updatedSolicitudes);
         } catch (error) {
             console.error('Error cambiando el estado de la solicitud', error);
