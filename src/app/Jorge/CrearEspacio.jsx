@@ -64,7 +64,7 @@ const CrearEspacioDeportivo = ({ user, setUser }) => {
     useEffect(() => {
         if (redirecting) {
             const timeoutId = setTimeout(() => {
-                navigate('/');
+                navigate('/home-encargado');
             }, 2100);
 
             return () => clearTimeout(timeoutId);
