@@ -6,16 +6,25 @@ const CrearSolicitudImplementos = () => {
     const [nombre, setNombre] = useState('');
     const [descripcion, setDescripcion] = useState('');
     const [cantidad, setCantidad] = useState(0);
+    const [showCamposModal, setShowCamposModal] = useState(false);
+    const [showEnviadoModal, setShowEnviadoModal] = useState(false);
     
-
     const handleSubmit = async (event) => {
         event.preventDefault();
+        if (!nombre || !descripcion || cantidad === 0) {
+            setShowCamposModal(true);
+            return;
+        }
+
         try {
             const estadosolicitud= "Pendiente";
             const fechadesolicitud = new Date();
             
             await axios.post('/api/solicitudImplementos', { nombre, descripcion, cantidad, fechadesolicitud, estadosolicitud });
-            console.log('Solicitud de implementos creada exitosamente');
+            setShowEnviadoModal(true);
+            setNombre('');
+            setDescripcion('');
+            setCantidad(0);
         } catch (error) {
             console.error('Error al crear la solicitud de implementos', error);
         }
@@ -61,8 +70,48 @@ const CrearSolicitudImplementos = () => {
                     </form>
                 </div>
             </div>
+
+            {/* Modal para campos incompletos */}
+            <div className="modal" tabIndex="-1" role="dialog" style={{ display: showCamposModal ? 'block' : 'none' }}>
+                <div className="modal-dialog" role="document">
+                    <div className="modal-content">
+                        <div className="modal-header">
+                            <h5 className="modal-title">Campos Incompletos</h5>
+                            <button type="button" className="close" data-dismiss="modal" aria-label="Close" onClick={() => setShowCamposModal(false)}>
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div className="modal-body">
+                            Por favor complete todos los campos antes de enviar el formulario.
+                        </div>
+                        <div className="modal-footer">
+                            <button type="button" className="btn btn-secondary" data-dismiss="modal" onClick={() => setShowCamposModal(false)}>Cerrar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {/* Modal para formulario enviado */}
+            <div className="modal" tabIndex="-1" role="dialog" style={{ display: showEnviadoModal ? 'block' : 'none' }}>
+                <div className="modal-dialog" role="document">
+                    <div className="modal-content">
+                        <div className="modal-header">
+                            <h5 className="modal-title">Formulario Enviado</h5>
+                            <button type="button" className="close" data-dismiss="modal" aria-label="Close" onClick={() => setShowEnviadoModal(false)}>
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div className="modal-body">
+                            Tu solicitud de implementos ha sido enviada exitosamente.
+                        </div>
+                        <div className="modal-footer">
+                            <button type="button" className="btn btn-secondary" data-dismiss="modal" onClick={() => setShowEnviadoModal(false)}>Cerrar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     );
-};
+};;
 
 export default CrearSolicitudImplementos;
