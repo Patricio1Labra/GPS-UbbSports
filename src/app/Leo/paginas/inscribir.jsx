@@ -3,8 +3,15 @@ import React, { useState, useEffect } from 'react';
 import { useSpring, animated } from 'react-spring';
 import axios from 'axios';
 import "../assets/style.css"
-import Sidebar from '../components/sidebar.jsx';
-import Navbar from '../components/Navbar.jsx'
+import AppBar from '@mui/material/AppBar';
+import Box from '@mui/material/Box';
+import Toolbar from '@mui/material/Toolbar';
+import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
+import IconButton from '@mui/material/IconButton';
+import "./Home.css";
+import TemporaryDrawer from './Comps/TempEncargado.jsx';
+
 
 const FormularioInscripcion = () => {
   const [datos, setDatos] = useState({
@@ -64,7 +71,7 @@ const FormularioInscripcion = () => {
             horarioDia: '',
             horarioInicio: '',
             horarioSalida: '',
-            cupos: 0,
+            cupos: '',
             recinto: '',
             entrenamiento: '',
           });
