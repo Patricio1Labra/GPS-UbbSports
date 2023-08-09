@@ -53,6 +53,22 @@ const FormularioInscripcion = () => {
         icon: 'success',
         title: '¡Inscripción realizada!',
         text: 'La inscripción se ha realizado exitosamente.',
+      }).then((result) => {
+        // Restablecer los valores de estado del formulario
+        if (result.isConfirmed) {
+          setDatos({
+            alumnos: [],
+            nombre: '',
+            descripcion: '',
+            entrenador: '',
+            horarioDia: '',
+            horarioInicio: '',
+            horarioSalida: '',
+            cupos: 0,
+            recinto: '',
+            entrenamiento: '',
+          });
+        }
       });
     } catch (error) {
       console.error('Error al enviar la inscripción:', error);
