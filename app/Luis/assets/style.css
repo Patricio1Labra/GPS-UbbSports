@@ -1,0 +1,39 @@
+/* Estilos generales */
+.container {
+    text-align: center;
+    margin: 0 auto;
+    max-width: 1000px;
+    padding: 20px;
+}
+
+.title {
+    margin-bottom: 20px;
+    font-size: 28px;
+}
+
+/* Estilos para la tabla */
+.data-table {
+    font-size: 24px;
+}
+
+.data-table .rdt_Table {
+    font-size: 16px;
+}
+
+/* Estilos para el modal */
+.ReactModal__Overlay {
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.ReactModal__Content {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 20px;
+    max-width: 400px;
+    width: 100%;
+    margin: 0 auto;
+}
