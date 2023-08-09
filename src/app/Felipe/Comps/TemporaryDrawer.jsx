@@ -34,7 +34,7 @@ export function TemporaryDrawer() {
     { text: 'Ver Ramas', path: '/home', icon: <LibraryBooksIcon /> },
     { text: 'Ver Horario', path: '/home', icon: <CalendarMonthIcon /> },
     { text: 'Pedir Recinto Deportivo', path: '/pedir-espacio', icon: <SportsBasketballIcon /> },
-    { text: 'Solicitar Recursos', path: '/home', icon: <SportsCricketIcon /> }
+    { text: 'Solicitar Recursos', path: '/home', icon: <SportsCricketIcon /> },
   ];
   const list = (anchor) => (
     <Box

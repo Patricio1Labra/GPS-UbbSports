@@ -13,7 +13,8 @@ import FitnessCenterIcon from '@mui/icons-material/FitnessCenter';
 import SportsMartialArtsIcon from '@mui/icons-material/SportsMartialArts';
 import MenuIcon from '@mui/icons-material/Menu';
 import EditIcon from '@mui/icons-material/Edit';
-import '../Home.css'
+import '../Home.css';
+import { Link } from 'react-router-dom';
 
 export function TempEntrenador() {
   const [state, setState] = React.useState({
@@ -31,6 +32,14 @@ export function TempEntrenador() {
     setState({ ...state, [anchor]: open });
   };
 
+  const menuItems = [
+    { text: 'Solicitar Implementos', icon: <FitnessCenterIcon />, path: '/solicitar-implementos' },
+    { text: 'Ver Ramas', icon: <LibraryBooksIcon />, path: '/ver-ramas' },
+    { text: 'Nuevo Entrenamiento', icon: <SportsMartialArtsIcon />, path: '/nuevo-entrenamiento' },
+    { text: 'Editar Entrenamiento', icon: <EditIcon />, path: '/editar-entrenamiento' },
+    { text: 'Crear Solicitud de Recursos', icon: <EditIcon />, path: '/solicitar-recursos' },
+  ];
+
   const list = (anchor) => (
     <Box
       sx={{ width: anchor === 'top' || anchor === 'bottom' ? 'auto' : 250 }}
@@ -39,15 +48,10 @@ export function TempEntrenador() {
       onKeyDown={toggleDrawer(anchor, false)}
     >
       <List>
-        {['Solicitar Implementos', 'Ver ramas', 'Nuevo Entrenamiento', 'Editar Entrenamiento'].map((text, index) => (
+        {menuItems.map(({ text, icon, path }) => (
           <ListItem key={text} disablePadding>
-            <ListItemButton>
-              <ListItemIcon>
-                {index % 4 === 0 ? <FitnessCenterIcon /> :
-                index % 4 === 1 ? <LibraryBooksIcon /> :
-                index % 4 === 2 ? <SportsMartialArtsIcon /> :
-                index % 4 === 3 ? <EditIcon /> : null}
-              </ListItemIcon>
+            <ListItemButton component={Link} to={path}>
+              <ListItemIcon>{icon}</ListItemIcon>
               <ListItemText primary={text} />
             </ListItemButton>
           </ListItem>
@@ -76,4 +80,5 @@ export function TempEntrenador() {
     </div>
   );
 }
+
 export default TempEntrenador;

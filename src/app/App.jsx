@@ -9,7 +9,10 @@ import Crear from './Jorge/CrearEspacio.jsx';
 import Pedir from './Jorge/PedirEspacio.jsx';
 import Ver from './Jorge/VerSolicitudes.jsx';
 import InscribirRama from './Leo/inscribir.jsx';
-import ModificarRama from './Leo/modificar.jsx'
+import ModificarRama from './Leo/modificar.jsx';
+import SolicitarImplementos from './Benjamin/SolicitarImplementos.jsx';
+import CrearSolicitudRecursos from './Benjamin/CrearSolicitudRecuros.jsx';
+import GestionarSolicitudRecursos from './Benjamin/GestionarSolicitudRecursos.jsx';
 // Importa otros componentes y dependencias necesarias
 
 function App() {
@@ -47,8 +50,9 @@ function App() {
         <Route path="/crear-rama" element={<InscribirRama user={user} setUser={setUser} />} />
         <Route path="/editar-rama" element={<ModificarRama user={user} setUser={setUser} />} />
 
-
-
+        <Route path="/solicitar-implementos" element={<SolicitarImplementos user={user} setUser={setUser} />} />
+        <Route path="/gestionar-recursos" element={<GestionarSolicitudRecursos user={user} setUser={setUser} />} />
+        <Route path="/solicitar-recursos" element={<CrearSolicitudRecursos user={user} setUser={setUser} />} />
 
       </Routes>
     </BrowserRouter>
