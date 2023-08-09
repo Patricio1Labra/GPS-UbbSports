@@ -4,11 +4,13 @@ import { Formulario } from './Felipe/Formulario.jsx';
 import { Home } from './Felipe/Home.jsx';
 import { HomeEncargado } from './Felipe/HomeEncargado.jsx';
 import { HomeEntrenador } from './Felipe/HomeEntrenador.jsx';
+import { VerSolicitudesImplemento } from './Felipe/Vistas/VerSolicitudesImplemento.jsx'; 
 // Importa otros componentes y dependencias necesarias
 
 function App() {
   const storedUser = JSON.parse(localStorage.getItem('user'));
   const [user, setUser] = useState(storedUser || []);
+
  return (
     <BrowserRouter>
       <Routes>
@@ -28,10 +30,11 @@ function App() {
           path="/home-entrenador"
           element={<HomeEntrenador user={user} setUser={setUser} />}
         />
+        <Route 
+          path="/ver-solicitudes-implemento" 
+          element={<VerSolicitudesImplemento />} />
       </Routes>
     </BrowserRouter>
   );
 }
-
-
 export default App;

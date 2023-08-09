@@ -7,26 +7,28 @@ import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import "./Home.css";
 import TemporaryDrawer from './Comps/TemporaryDrawer.jsx';
-
+import imagenCentro from '../assets/ubbs.png';
 
 export function Home({ user, setUser }){
+  
+  if (!user) {
+    return null; // No renderizar nada en este caso
+  }
+
   const handleLogout = () => {
     setUser([]); // Reset user state
     localStorage.removeItem('user'); // Clear user data from localStorage
     window.location.href = '/'; // Redirect to login page
   };
-const [userName, setUserName] = useState(""); // Nombre del usuario
-const [menuOpen, setMenuOpen] = useState("");
-const estudianteData = user;
-console.log(estudianteData);
-const handleMenuClick = () => {
+
+  const [menuOpen, setMenuOpen] = useState("");
+
+  const handleMenuClick = () => {
     console.log("handleMenuClick");
     setMenuOpen(!menuOpen);
-};
+  };
 
-
-
-  return (
+  return(
     <div>
       <Box sx={{ flexGrow: 1 }}>
         <AppBar position="static">
@@ -34,20 +36,22 @@ const handleMenuClick = () => {
             <IconButton
               size="large"
               edge="start"
-              color="inherit"
+              color="inherent"
               aria-label="menu"
               sx={{ mr: 2 }}
             >
-            <TemporaryDrawer open={menuOpen} onClose={handleMenuClick} style={{ color: 'black' }} />
+              <TemporaryDrawer open={menuOpen} onClose={handleMenuClick} style={{ color: 'black' }} />
             </IconButton>
             <Typography className='texto1' variant="h6" style={{ color: 'white' }} component="div" sx={{ flexGrow: 1 }}>
-            <span style={{ color: 'white' }}>Bienvenido,</span> <span style={{ color: 'black' }}>{user.nombre}</span>
+            <center><span style={{ color: 'white' }}>Bienvenido,</span> <span style={{ color: 'white' }}>{user.nombre}</span></center>
             </Typography>
             <Button onClick={handleLogout} style={{ color: 'white' }} color="inherit">Cerrar Sesión</Button>
           </Toolbar>
         </AppBar>
       </Box>
-      {/* Renderizar el contenido */}
+      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: 'calc(100vh - 64px)' }}>
+        <img src={imagenCentro} />
+      </Box>
     </div>
   );
 } 

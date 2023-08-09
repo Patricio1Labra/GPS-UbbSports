@@ -8,12 +8,14 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import MailIcon from '@mui/icons-material/Mail';
+import LibraryBooksIcon from '@mui/icons-material/LibraryBooks';
+import FitnessCenterIcon from '@mui/icons-material/FitnessCenter';
+import SportsMartialArtsIcon from '@mui/icons-material/SportsMartialArts';
 import MenuIcon from '@mui/icons-material/Menu';
+import EditIcon from '@mui/icons-material/Edit';
 import '../Home.css'
 
-export function HomeEntrenador() {
+export function TempEntrenador() {
   const [state, setState] = React.useState({
     top: false,
     left: false,
@@ -37,11 +39,14 @@ export function HomeEntrenador() {
       onKeyDown={toggleDrawer(anchor, false)}
     >
       <List>
-        {['Entrenar', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
+        {['Solicitar Implementos', 'Ver ramas', 'Nuevo Entrenamiento', 'Editar Entrenamiento'].map((text, index) => (
           <ListItem key={text} disablePadding>
             <ListItemButton>
               <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                {index % 4 === 0 ? <FitnessCenterIcon /> :
+                index % 4 === 1 ? <LibraryBooksIcon /> :
+                index % 4 === 2 ? <SportsMartialArtsIcon /> :
+                index % 4 === 3 ? <EditIcon /> : null}
               </ListItemIcon>
               <ListItemText primary={text} />
             </ListItemButton>
@@ -49,18 +54,6 @@ export function HomeEntrenador() {
         ))}
       </List>
       <Divider />
-      <List>
-        {['All mail', 'Trash', 'Spam'].map((text, index) => (
-          <ListItem key={text} disablePadding>
-            <ListItemButton>
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItemButton>
-          </ListItem>
-        ))}
-      </List>
     </Box>
   );
 
@@ -69,7 +62,7 @@ export function HomeEntrenador() {
       {['left'].map((anchor) => (
         <React.Fragment key={anchor}>
           <Button onClick={toggleDrawer(anchor, true)}>
-            <MenuIcon className='menu' />
+            <MenuIcon className='menu' style={{color: 'white'}} />
           </Button>
           <Drawer
             anchor={anchor}
@@ -83,4 +76,4 @@ export function HomeEntrenador() {
     </div>
   );
 }
-export default HomeEntrenador;
+export default TempEntrenador;

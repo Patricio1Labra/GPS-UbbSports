@@ -8,10 +8,12 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import MailIcon from '@mui/icons-material/Mail';
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import SportsBasketballIcon from '@mui/icons-material/SportsBasketball';
 import MenuIcon from '@mui/icons-material/Menu';
+import SportsCricketIcon from '@mui/icons-material/SportsCricket';
 import '../Home.css'
+import LibraryBooksIcon from '@mui/icons-material/LibraryBooks';
 
 export function TemporaryDrawer() {
   const [state, setState] = React.useState({
@@ -37,11 +39,14 @@ export function TemporaryDrawer() {
       onKeyDown={toggleDrawer(anchor, false)}
     >
       <List>
-        {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
+        {['Ver Ramas', 'Ver Horario', 'Pedir Recinto Deportivo', 'Solicitar Recursos'].map((text, index) => (
           <ListItem key={text} disablePadding>
-            <ListItemButton>
+            <ListItemButton >
               <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                {index % 4 === 0 ? <LibraryBooksIcon /> :
+                index % 4 === 1 ? <CalendarMonthIcon /> :
+                index % 4 === 2 ? <SportsBasketballIcon /> :
+                index % 4 === 3 ? <SportsCricketIcon /> : null} 
               </ListItemIcon>
               <ListItemText primary={text} />
             </ListItemButton>
@@ -49,18 +54,6 @@ export function TemporaryDrawer() {
         ))}
       </List>
       <Divider />
-      <List>
-        {['All mail', 'Trash', 'Spam'].map((text, index) => (
-          <ListItem key={text} disablePadding>
-            <ListItemButton>
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItemButton>
-          </ListItem>
-        ))}
-      </List>
     </Box>
   );
 
@@ -69,7 +62,7 @@ export function TemporaryDrawer() {
       {['left'].map((anchor) => (
         <React.Fragment key={anchor}>
           <Button onClick={toggleDrawer(anchor, true)}>
-            <MenuIcon className='menu' />
+            <MenuIcon className='menu' style={{color: 'white'}}/>
           </Button>
           <Drawer 
             anchor={anchor}

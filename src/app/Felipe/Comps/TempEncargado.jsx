@@ -8,12 +8,18 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import MailIcon from '@mui/icons-material/Mail';
+import RemoveRedEyeOutlinedIcon from '@mui/icons-material/RemoveRedEyeOutlined';
 import MenuIcon from '@mui/icons-material/Menu';
+import AddBoxIcon from '@mui/icons-material/AddBox';
+import ModeEditIcon from '@mui/icons-material/ModeEdit';
+import PlaylistAddOutlinedIcon from '@mui/icons-material/PlaylistAddOutlined';
+import LibraryAddOutlinedIcon from '@mui/icons-material/LibraryAddOutlined';
+import RequestPageOutlinedIcon from '@mui/icons-material/RequestPageOutlined';
 import '../Home.css'
+import { Link } from 'react-router-dom';
+import VerSolicitudesImplemento from '../Vistas/VerSolicitudesImplemento.jsx';
 
-export function HomeEncargado() {
+export function TempEncargado() {
   const [state, setState] = React.useState({
     top: false,
     left: false,
@@ -37,11 +43,14 @@ export function HomeEncargado() {
       onKeyDown={toggleDrawer(anchor, false)}
     >
       <List>
-        {['Encargar', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
+        {['Nueva Rama', 'Editar Rama', 'Nuevo Recinto Deportivo', 'Solicitudes de Recursos'].map((text, index) => (
           <ListItem key={text} disablePadding>
             <ListItemButton>
               <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+              {index % 4 === 0 ? <AddBoxIcon /> :
+                index % 4 === 1 ? <ModeEditIcon /> :
+                index % 4 === 2 ? <PlaylistAddOutlinedIcon /> :
+                index % 4 === 3 ? <RequestPageOutlinedIcon /> : null}
               </ListItemIcon>
               <ListItemText primary={text} />
             </ListItemButton>
@@ -50,11 +59,11 @@ export function HomeEncargado() {
       </List>
       <Divider />
       <List>
-        {['All mail', 'Trash', 'Spam'].map((text, index) => (
+        {['Nueva Solicitud de Recinto Deportivo', 'Ver Solicitudes de Implemento'].map((text, index) => (
           <ListItem key={text} disablePadding>
-            <ListItemButton>
+            <ListItemButton component={index === 1 ? Link : 'button'} to="/ver-solicitudes-implemento">
               <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                {index % 2 === 0 ? <LibraryAddOutlinedIcon /> : <RemoveRedEyeOutlinedIcon />}
               </ListItemIcon>
               <ListItemText primary={text} />
             </ListItemButton>
@@ -69,7 +78,7 @@ export function HomeEncargado() {
       {['left'].map((anchor) => (
         <React.Fragment key={anchor}>
           <Button onClick={toggleDrawer(anchor, true)}>
-            <MenuIcon className='menu' />
+            <MenuIcon className='menu' style={{color: 'white'}}/>
           </Button>
           <Drawer
             anchor={anchor}
@@ -83,4 +92,4 @@ export function HomeEncargado() {
     </div>
   );
 }
-export default HomeEncargado;
+export default TempEncargado;

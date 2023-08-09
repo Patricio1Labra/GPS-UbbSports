@@ -15,7 +15,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 55vh; /* Ajusta la altura según tus necesidades */
+    height: 43vh; /* Ajusta la altura según tus necesidades */
   }
 
 .imageContainer img {
@@ -36,14 +36,15 @@ body {
     top: 50%;
     left: 50%;
     transform: translate(-50%,-50%);
-    background: white;
+    background: rgb(255, 255, 255);
     border-radius: 10px;
+    
   }
 .formulario .text1{
     font-size: 20px;
     text-align: center;
     padding: 0 0 20px 0;
-    border-bottom: 1px solid silver;
+    border-bottom: 1px solid #adadad;
     font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
 }
 .formulario form{
@@ -92,6 +93,7 @@ body {
 
 .botonini{
     width: 40%;
+    max-width: 200px;
     height: 50px;
     border: 1px solid;
     background:  #007bff;

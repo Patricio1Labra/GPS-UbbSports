@@ -5,11 +5,13 @@ import { Route, useNavigate } from 'react-router-dom';
 import './Formulario.css'
 
 export function Formulario({ user, setUser }) {
+
   const [rut, SetRut] = useState("");
   const [password, SetPass] = useState("");
   const [errorRut, setErrorRut] = useState(false); 
   const [error, setError] = useState(false);
   const navigate = useNavigate();
+
   
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -42,27 +44,29 @@ export function Formulario({ user, setUser }) {
   };
 
   function validarRut(rut) {
-    const cleanRut = rut.replace(/[^0-9kK]/g, '');
+    const cleanRut = rut.replace(/[^0-9kK]/g, '').toUpperCase();
+  
     if (cleanRut.length < 2) {
       return false;
     }
-
+  
     const rutNumbers = cleanRut.slice(0, -1);
-    const verificador = cleanRut.slice(-1).toUpperCase();
+    const verificadorIngresado = cleanRut.slice(-1);
     const rutWithoutDots = rutNumbers.replace(/\./g, '');
     let sum = 0;
     let factor = 2;
-
+  
     for (let i = rutWithoutDots.length - 1; i >= 0; i--) {
       sum += parseInt(rutWithoutDots.charAt(i), 10) * factor;
       factor = factor === 7 ? 2 : factor + 1;
     }
-
+  
     const dvExpected = 11 - (sum % 11);
     const dv = dvExpected === 11 ? '0' : dvExpected === 10 ? 'K' : String(dvExpected);
-
-    return dv === verificador;
+  
+    return dv === verificadorIngresado;
   }
+  
 
   return (
     <div>
