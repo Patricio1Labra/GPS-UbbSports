@@ -76,9 +76,20 @@ const DropdownRamaDeportiva = () => {
         console.log('Data updated successfully:', response.data);
         // Actualiza la lista de ramas deportivas para reflejar los cambios
         setEditing(false);
+        Swal.fire({
+          icon: 'success',
+          title: '¡Inscripción enviada!',
+          text: 'La inscripción se ha enviado exitosamente.',
+        });
       })
       .catch(error => {
         console.error('Error updating data:', error);
+        // Mostrar mensaje de error con SweetAlert
+        Swal.fire({
+          icon: 'error',
+          title: 'Error al enviar la inscripción',
+          text: 'Hubo un problema al enviar la inscripción. Por favor, inténtalo nuevamente.',
+        });
       });
   };
   const inputAnimation = useSpring({
@@ -119,14 +130,14 @@ const DropdownRamaDeportiva = () => {
                         <div className="card-header bg-light">
                           <h7 className="form-register">Selecciona la rama</h7>
                           <br />
-                          <select className='form-select m-10 w-100 align-self-center' value={selectedRama} onChange={handleChange}>
+                          <select className='form-select m-10 w-100 align-self-center controls' value={selectedRama} onChange={handleChange}>
                             <option value="">Seleccione una rama deportiva</option>
                             {ramas.map(rama => (
 
                               <option key={rama._id} value={rama.nombre}>{rama.nombre}</option>
                             ))}
                           </select>
-                          <button className="btn-primary w-100 align-self-center" type="submit" onClick={handleEditClick} disabled={!selectedRama}>
+                          <button className="btn-primary w-100 align-self-center " type="submit" onClick={handleEditClick} disabled={!selectedRama}>
                             Editar
                           </button>
                         </div>
@@ -168,6 +179,13 @@ const DropdownRamaDeportiva = () => {
                                 value={editedData.horaInicio}
                                 onChange={handleFormChange}
                               />
+                              horaInicio:
+                              <input className='controls'
+                                name="HoraSalida"
+                                type="time"
+                                value={editedData.HoraSalida}
+                                onChange={handleFormChange}
+                              />
                               cupos:
                               <input className='controls'
                                 name="cupos"
@@ -176,7 +194,7 @@ const DropdownRamaDeportiva = () => {
                                 onChange={handleFormChange}
                               />
                               recinto:
-                              <select className='form-select m-10 w-100 align-self-center' name="recinto" value={editedData.recinto} onChange={handleFormChange}>
+                              <select className='form-select m-10 w-100 align-self-center controls' name="recinto" value={editedData.recinto} onChange={handleFormChange}>
                                 <option value="">Seleccione un recinto deportivo</option>
                                 {recintos.map(recinto => (
                                   <option key={recinto._id} value={recinto.nombre}>{recinto.nombre}</option>

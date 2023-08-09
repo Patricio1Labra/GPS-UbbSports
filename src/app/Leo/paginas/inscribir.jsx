@@ -48,9 +48,20 @@ const FormularioInscripcion = () => {
     const horarioSalida = new Date(`${datos.horarioDia} ${datos.horarioSalida}`);
     try {
       const response = await axios.post('/api/inscripciones', datos);
-      console.log('Inscripción realizada:', response.data);
+      // Mostrar mensaje de éxito con SweetAlert
+      Swal.fire({
+        icon: 'success',
+        title: '¡Inscripción realizada!',
+        text: 'La inscripción se ha realizado exitosamente.',
+      });
     } catch (error) {
       console.error('Error al enviar la inscripción:', error);
+      // Mostrar mensaje de error con SweetAlert
+      Swal.fire({
+        icon: 'error',
+        title: 'Error al enviar la inscripción',
+        text: 'Hubo un problema al enviar la inscripción. Por favor, inténtalo nuevamente.',
+      });
     }
   };
 
@@ -158,7 +169,7 @@ const FormularioInscripcion = () => {
                             required
                           />
 
-                          <select className='form-select m-10 w-100 align-self-center' name="recinto" value={datos.recinto} onChange={handleChange}>
+                          <select className='form-select m-10 w-100 align-self-center controls' name="recinto" value={datos.recinto} onChange={handleChange}>
                             <option value="">Seleccione un recinto deportivo</option>
                             {recintos.map(recinto => (
                               <option key={recinto._id} value={recinto.nombre}>{recinto.nombre}</option>

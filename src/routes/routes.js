@@ -19,7 +19,6 @@ router.post('/inscripciones', async (req, res) => {
             entrenamiento,
         } = req.body;
 
-        // Crear una nueva instancia de Inscripcion con los datos recibidos
         const nuevaInscripcion = new RamaDeportiva({
             alumnos,
             nombre,
