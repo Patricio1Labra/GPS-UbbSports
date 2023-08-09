@@ -3,8 +3,10 @@ import DataTable from 'react-data-table-component';
 import axios from 'axios';
 import Modal from 'react-modal';
 
+import VerHorario from './verHorario.jsx';
+
+import 'bootstrap/dist/css/bootstrap.min.css'; // Importa los estilos de Bootstrap
 import './assets/style.css'; // Importa el archivo CSS de estilos generales
-import VerHorario from './verHorario.jsx'; // Ajusta la ruta según la ubicación correcta
 
 const VerRamaInscritas = () => {
     const [ramasInscritas, setRamasInscritas] = useState([]);
@@ -38,7 +40,12 @@ const VerRamaInscritas = () => {
         {
             name: 'Ver Horario',
             cell: row => (
-                <button onClick={() => openModal(row)}>Ver Horario</button>
+                <button
+                    className="btn btn-primary btn-sm"
+                    onClick={() => openModal(row)}
+                >
+                    Ver Horario
+                </button>
             ),
             ignoreRowClick: true,
             allowOverflow: true,
@@ -57,29 +64,31 @@ const VerRamaInscritas = () => {
     };
 
     return (
-        <div className="container">
-            <h2 className="title">Ramas Inscritas</h2>
-            <div className="antecedentes">
-                <h3>Antecedentes</h3>
-                {estudiante && (
-                    <div className="antecedentes-content">
-                        {/* Datos del estudiante */}
+        <div className="container mt-4">
+            <h2 className="title mb-3 fs-4">Ramas Inscritas</h2>
+            <div className="card">
+                <div className="card-header">
+                    <h3 className="fs-5">Antecedentes</h3>
+                </div>
+                <div className="card-body">
+                    {estudiante && (
                         <div>
-                            <p><strong>Nombre:</strong> {estudiante.nombre}</p>
-                            <p><strong>Carrera:</strong> {estudiante.carrera}</p>
-                            <p><strong>Teléfono:</strong> {estudiante.telefono}</p>
-                            <p><strong>Correo:</strong> {estudiante.correo}</p>
-                            <p><strong>RUT:</strong> {estudiante.rut}</p>
-                            <p><strong>Descripción:</strong> {estudiante.descripcion}</p>
+                            <p className="fs-6"><strong>Nombre:</strong> {estudiante.nombre}</p>
+                            <p className="fs-6"><strong>Carrera:</strong> {estudiante.carrera}</p>
+                            <p className="fs-6"><strong>Teléfono:</strong> {estudiante.telefono}</p>
+                            <p className="fs-6"><strong>Correo:</strong> {estudiante.correo}</p>
+                            <p className="fs-6"><strong>RUT:</strong> {estudiante.rut}</p>
+                            <p className="fs-6"><strong>Descripción:</strong> {estudiante.descripcion}</p>
                         </div>
-                    </div>
-                )}
+                    )}
+                </div>
             </div>
             <DataTable
                 columns={columns}
                 data={ramasInscritas}
                 pagination
                 highlightOnHover
+                className="mt-4 fs-6 table-responsive"
             />
             <VerHorario
                 isOpen={modalIsOpen}
