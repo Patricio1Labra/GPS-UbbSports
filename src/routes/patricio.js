@@ -94,38 +94,6 @@ router.get('/ramas', async (req, res) => {
       res.status(500).json({ error: 'Error al editar estudiante' });
     }
   });  
-
-  router.put('/ramas/:id', async (req, res) => {
-    try {
-      const ramaId = req.body.ramaId;
-      const accion = req.body.accion; // Acción: 'agregar' o 'eliminar'
-      const estudianteId = req.params.id; // ID del estudiante a agregar o eliminar
-  
-      // Obtener la rama deportiva existente
-      const ramaExistente = await RamaDeportiva.findById(ramaId);
-  
-      if (accion === 'agregar') {
-        // Verificar si el estudiante ya está en la lista de alumnos de la rama
-        if (ramaExistente.alumnos.includes(estudianteId)) {
-          return res.status(400).json({ error: 'El estudiante ya está registrado en esta rama deportiva' });
-        }
-  
-        // Agregar el nuevo estudiante al arreglo de alumnos de la rama
-        ramaExistente.alumnos.push(estudianteId);
-      } else if (accion === 'eliminar') {
-        // Eliminar el estudiante del arreglo de alumnos de la rama
-        ramaExistente.alumnos = ramaExistente.alumnos.filter(id => id.toString() !== estudianteId);
-      }
-  
-      // Guardar la rama deportiva actualizada en la base de datos
-      const ramaEditada = await ramaExistente.save();
-  
-      res.json(ramaEditada);
-    } catch (error) {
-      res.status(500).json({ error: 'Error al editar la rama deportiva' });
-    }
-  });
-  
   
   router.post('/ramas', async (req, res) => {
     try {

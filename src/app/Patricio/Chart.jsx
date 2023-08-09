@@ -67,8 +67,6 @@ export default function Pagina({ user, setUser }) {
       .catch(error => {
         console.error('Error al cargar todas las ramas:', error);
       });
-      //setRamasRegistradas(ramas.filter(rama => ramasEstudiante.includes(rama._id)));
-      //setRamasNoRegistradas(ramas.filter(rama => !ramasEstudiante.includes(rama._id)));
   }, [estudianteId]);
   
   useEffect(() => {
@@ -98,25 +96,6 @@ export default function Pagina({ user, setUser }) {
       }
     } catch (error) {
       console.error('Error al editar el estudiante:', error);
-    }
-  };
-
-  const editarRama = async (accion, ramaId) => {
-    try {
-      const response = await fetch(`http://localhost:3000/api1/ramas/${ramaId}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ accion, estudianteId })
-      });
-
-      if (response.ok) {
-      } else {
-        console.error('Error al editar la rama');
-      }
-    } catch (error) {
-      console.error('Error al editar la rama:', error);
     }
   };
 
@@ -152,10 +131,8 @@ export default function Pagina({ user, setUser }) {
             <IconButton aria-label="" onClick={() => {
                   if (isRegistered) {
                     editarEstudiante('eliminar', item._id);
-                    editarRama('eliminar', item._id);
                   } else {
                     editarEstudiante('agregar', item._id);
-                    editarRama('agregar', item._id);
                   }
                 }}>
               {isRegistered ? (
