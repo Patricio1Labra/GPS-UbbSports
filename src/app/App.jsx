@@ -14,6 +14,9 @@ import SolicitarImplementos from './Benjamin/SolicitarImplementos.jsx';
 import CrearSolicitudRecursos from './Benjamin/CrearSolicitudRecuros.jsx';
 import GestionarSolicitudRecursos from './Benjamin/GestionarSolicitudRecursos.jsx';
 import VerRamaInscritas from './Luis/verRamaInscritas.jsx';
+import VerRama from './andres/verRama.jsx';
+import CrearEntrenamiento from './andres/crearEntrenamiento.jsx';
+import EditarEntrenamiento from './andres/planificacion.jsx';
 // Importa otros componentes y dependencias necesarias
 
 function App() {
@@ -54,8 +57,17 @@ function App() {
         <Route path="/solicitar-implementos" element={<SolicitarImplementos user={user} setUser={setUser} />} />
         <Route path="/gestionar-recursos" element={<GestionarSolicitudRecursos user={user} setUser={setUser} />} />
         <Route path="/solicitar-recursos" element={<CrearSolicitudRecursos user={user} setUser={setUser} />} />
-        
+
         <Route path="/ver-ramas-inscritas" element={<VerRamaInscritas user={user} setUser={setUser} />} />
+
+        <Route path="/crear-entrenamiento/:id" element={<CrearEntrenamiento user={user} setUser={setUser} />} />
+        <Route path="/editar-entrenamiento/:id" element={<EditarEntrenamiento user={user} setUser={setUser} />} />
+        <Route path="/ver-rama" element={<VerRama user={user} setUser={setUser} />} />
+
+
+
+
+
       </Routes>
     </BrowserRouter>
   );

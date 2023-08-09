@@ -37,10 +37,9 @@ export function TempEncargado() {
     { text: 'Nueva Rama', icon: <AddBoxIcon />, path: '/crear-rama' },
     { text: 'Editar Rama', icon: <ModeEditIcon />, path: '/editar-rama' },
     { text: 'Nuevo Recinto Deportivo', icon: <PlaylistAddOutlinedIcon />, path: '/crear-espacio' },
-    { text: 'Gestionar Solicitudes de Recursos', icon: <RequestPageOutlinedIcon />, path: '/gestionar-recursos' },
+    { text: 'Solicitudes de Recursos', icon: <RequestPageOutlinedIcon />, path: '/gestionar-recursos' },
     { text: 'Ver Solicitudes de Recintos Deportivos', icon: <LibraryAddOutlinedIcon />, path: '/ver-espacio' },
-    { text: 'Ver Solicitudes de Implemento', icon: <RemoveRedEyeOutlinedIcon />, path: '/home-encargado' },
-
+    { text: 'Ver Solicitudes de Implemento', icon: <RemoveRedEyeOutlinedIcon />, path: '/home-encargado' }
   ];
   const list = (anchor) => (
     <Box

@@ -45,7 +45,7 @@ export function TemporaryDrawer() {
       onClick={toggleDrawer(anchor, false)}
       onKeyDown={toggleDrawer(anchor, false)}
     >
-       <List>
+      <List>
         {links.map((link, index) => (
           <ListItem key={link.text} disablePadding>
             <ListItemButton component={Link} to={link.path}>
@@ -64,9 +64,9 @@ export function TemporaryDrawer() {
       {['left'].map((anchor) => (
         <React.Fragment key={anchor}>
           <Button onClick={toggleDrawer(anchor, true)}>
-            <MenuIcon className='menu' style={{color: 'white'}}/>
+            <MenuIcon className='menu' style={{ color: 'white' }} />
           </Button>
-          <Drawer 
+          <Drawer
             anchor={anchor}
             open={state[anchor]}
             onClose={toggleDrawer(anchor, false)}

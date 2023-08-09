@@ -469,36 +469,36 @@ router.put('/actualizarEntrenamiento/:entrenamientoId', async (req, res) => {
 ////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////LUSHO/////////////////////////////////////
 router.get('/estudiantes1/:id', async (req, res) => {
-  try {
-      const estudianteId = req.params.id;
-      const estudiante = await Estudiante.findById(estudianteId);
-      
-      if (!estudiante) {
-          return res.status(404).json({ error: 'Estudiante no encontrado' });
-      }
-      
-      res.json(estudiante);
-  } catch (error) {
-      console.error('Error al obtener la información del estudiante:', error);
-      res.status(500).json({ error: 'Error del servidor' });
-  }
+    try {
+        const estudianteId = req.params.id;
+        const estudiante = await Estudiante.findById(estudianteId);
+
+        if (!estudiante) {
+            return res.status(404).json({ error: 'Estudiante no encontrado' });
+        }
+
+        res.json(estudiante);
+    } catch (error) {
+        console.error('Error al obtener la información del estudiante:', error);
+        res.status(500).json({ error: 'Error del servidor' });
+    }
 });
 
 
 router.get('/estudiantes1/:id/ramas', async (req, res) => {
-  try {
-    const estudianteId = req.params.id;
-    const estudiante = await Estudiante.findById(estudianteId);
+    try {
+        const estudianteId = req.params.id;
+        const estudiante = await Estudiante.findById(estudianteId);
 
-    if (!estudiante) {
-      return res.status(404).json({ mensaje: 'Estudiante no encontrado' });
+        if (!estudiante) {
+            return res.status(404).json({ mensaje: 'Estudiante no encontrado' });
+        }
+
+        const ramasDeportivas = estudiante.ramaDeportiva || [];
+        res.json(ramasDeportivas);
+    } catch (error) {
+        res.status(500).json({ mensaje: 'Error al obtener las ramas deportivas', error: error.message });
     }
-
-    const ramasDeportivas = estudiante.ramaDeportiva || [];
-    res.json(ramasDeportivas);
-  } catch (error) {
-    res.status(500).json({ mensaje: 'Error al obtener las ramas deportivas', error: error.message });
-  }
 });
 
 

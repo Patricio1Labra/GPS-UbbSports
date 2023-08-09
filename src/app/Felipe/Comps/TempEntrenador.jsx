@@ -35,9 +35,9 @@ export function TempEntrenador() {
   const menuItems = [
     { text: 'Solicitar Implementos', icon: <FitnessCenterIcon />, path: '/solicitar-implementos' },
     { text: 'Ver Ramas', icon: <LibraryBooksIcon />, path: '/ver-ramas' },
-    { text: 'Nuevo Entrenamiento', icon: <SportsMartialArtsIcon />, path: '/nuevo-entrenamiento' },
+    { text: 'Nuevo Entrenamiento', icon: <SportsMartialArtsIcon />, path: '/crear-entrenamiento' },
     { text: 'Editar Entrenamiento', icon: <EditIcon />, path: '/editar-entrenamiento' },
-    { text: 'Crear Solicitud de Recursos', icon: <EditIcon />, path: '/solicitar-recursos' },
+    { text: 'Crear Solicitud de Recursos', icon: <EditIcon />, path: '/solicitar-recursos' }
   ];
 
   const list = (anchor) => (
@@ -66,7 +66,7 @@ export function TempEntrenador() {
       {['left'].map((anchor) => (
         <React.Fragment key={anchor}>
           <Button onClick={toggleDrawer(anchor, true)}>
-            <MenuIcon className='menu' style={{color: 'white'}} />
+            <MenuIcon className='menu' style={{ color: 'white' }} />
           </Button>
           <Drawer
             anchor={anchor}
