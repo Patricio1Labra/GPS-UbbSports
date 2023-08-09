@@ -42,6 +42,31 @@ const EstudianteSchema = new Schema({
   recintoSolicitado: String
 });
 
+// Esquema para Estudiante
+const HorarioEstudianteSchema = new Schema({
+  nombre: String,
+  carrera: String,
+  correo: String,
+  rut: String,
+  telefono: String,
+  descripcion: String,
+  contraseña: String,
+  ramaDeportiva: [{
+    nombre: String,
+    descripcion: String,
+    entrenador: String,
+    horario: {
+      dia: String,
+      horaInicio: Date,
+      horaSalida: Date
+    },
+    recinto: String
+
+  }],
+  implementosSolicitados: [String],
+  recintoSolicitado: String
+});
+
 // Esquema para Recinto Deportivo
 const RecintoDeportivoSchema = new Schema({
   nombre: String,
@@ -79,7 +104,7 @@ const RamaDeportivaSchema = new Schema({
   horario: {
     dia: String,
     horaInicio: Date,
-    HoraSalida: Date
+    horaSalida: Date
   },
   cupos: Number,
   recinto: String,
@@ -97,6 +122,8 @@ const RecursosSchema = new Schema({
 });
 
 // Modelos basados en los esquemas
+const HorarioEstudiante = mongoose.model('HorarioEstudiante', HorarioEstudianteSchema);
+
 const Entrenador = mongoose.model('Entrenador', EntrenadorSchema);
 const SolicitudImplementos = mongoose.model('SolicitudImplementos', SolicitudImplementosSchema);
 const Estudiante = mongoose.model('Estudiante', EstudianteSchema);
@@ -108,6 +135,7 @@ const Recursos = mongoose.model('Recursos', RecursosSchema);
 
 // Exportar los modelos
 module.exports = {
+  HorarioEstudiante,
   Entrenador,
   SolicitudImplementos,
   Estudiante,
