@@ -37,12 +37,20 @@ router.get('/estudiantes', async (req, res) => {
 
 router.get('/estudiantes/:id', async (req, res) => {
   try {
-    const estudiante = await Estudiante.findById(req.params.id);
-    res.json(estudiante);
+      const estudianteId = req.params.id;
+      const estudiante = await Estudiante.findById(estudianteId);
+      
+      if (!estudiante) {
+          return res.status(404).json({ error: 'Estudiante no encontrado' });
+      }
+      
+      res.json(estudiante);
   } catch (error) {
-    res.status(500).json({ error: 'Error al obtener datos del estudiante' });
+      console.error('Error al obtener la información del estudiante:', error);
+      res.status(500).json({ error: 'Error del servidor' });
   }
 });
+
 
 router.get('/estudiantes/:id/ramas', async (req, res) => {
   try {

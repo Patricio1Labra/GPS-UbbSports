@@ -1,12 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import DataTable from 'react-data-table-component';
 import axios from 'axios';
-import VerHorario from './verHorario.jsx'; // Asegúrate de la ruta correcta
+import Modal from 'react-modal';
+
+import './assets/style.css'; // Importa el archivo CSS de estilos generales
+import VerHorario from './verHorario.jsx'; // Ajusta la ruta según la ubicación correcta
 
 const VerRamaInscritas = () => {
     const [ramasInscritas, setRamasInscritas] = useState([]);
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [selectedRama, setSelectedRama] = useState(null);
+    const [estudiante, setEstudiante] = useState(null);
     const estudianteId = '64d3544345d266a0d45a5f5c'; // ID del estudiante (ajusta esto)
 
     useEffect(() => {
@@ -17,6 +21,15 @@ const VerRamaInscritas = () => {
             })
             .catch(error => {
                 console.error('Error al obtener las ramas inscritas:', error);
+            });
+
+        // Obtiene la información del estudiante
+        axios.get(`/api/estudiantes/${estudianteId}`)
+            .then(response => {
+                setEstudiante(response.data);
+            })
+            .catch(error => {
+                console.error('Error al obtener la información del estudiante:', error);
             });
     }, []);
 
@@ -44,8 +57,24 @@ const VerRamaInscritas = () => {
     };
 
     return (
-        <div>
-            <h2>Ramas Inscritas</h2>
+        <div className="container">
+            <h2 className="title">Ramas Inscritas</h2>
+            <div className="antecedentes">
+                <h3>Antecedentes</h3>
+                {estudiante && (
+                    <div className="antecedentes-content">
+                        {/* Datos del estudiante */}
+                        <div>
+                            <p><strong>Nombre:</strong> {estudiante.nombre}</p>
+                            <p><strong>Carrera:</strong> {estudiante.carrera}</p>
+                            <p><strong>Teléfono:</strong> {estudiante.telefono}</p>
+                            <p><strong>Correo:</strong> {estudiante.correo}</p>
+                            <p><strong>RUT:</strong> {estudiante.rut}</p>
+                            <p><strong>Descripción:</strong> {estudiante.descripcion}</p>
+                        </div>
+                    </div>
+                )}
+            </div>
             <DataTable
                 columns={columns}
                 data={ramasInscritas}
