@@ -5,41 +5,39 @@ import axios from 'axios';
 
 function EditarEntrenamiento() {
   const { id } = useParams();
-  const [reservas, setReservas] = useState([]);
-  const [selectedReserva, setSelectedReserva] = useState(null);
-  const [editMode, setEditMode] = useState(false); // Nuevo estado para el modo de edición
+  const [entrenamientos, setEntrenamientos] = useState([]);
+  const [selectedEntrenamiento, setSelectedEntrenamiento] = useState(null);
 
   
   // Cargar los datos de la base de datos al montar el componente
+
   useEffect(() => {
-    async function fetchReservas() {
+    async function fetchEntrenamientos() {
       try {
-        const response = await axios.get(`/api/obtenerReservasPorCurso/${id}`);
-        setReservas(response.data);
+        const response = await axios.get(`/api/obtenerEntrenamientosPorRama/${id}`);
+        setEntrenamientos(response.data);
       } catch (error) {
-        console.error('Error al cargar las reservas:', error);
+        console.error('Error al cargar los entrenamientos:', error);
       }
     }
-  
-    fetchReservas();
+
+    fetchEntrenamientos();
   }, [id]);
 
-  const handleReservaChange = (e) => {
-    const reservaId = parseInt(e.target.value);
-    const selected = reservas.find((reserva) => reserva.id === reservaId);
-    setSelectedReserva(selected);
+  const handleEntrenamientoChange = (e) => {
+    const entrenamientoId = parseInt(e.target.value);
+    const selected = entrenamientos.find((entrenamiento) => entrenamiento.id === entrenamientoId);
+    setSelectedEntrenamiento(selected);
   };
-  
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!selectedReserva) {
+    if (!selectedEntrenamiento) {
       return;
     }
 
     try {
-      await axios.put(`/api/actualizarReserva/${selectedReserva.id}`, selectedReserva);
+      await axios.put(`/api/actualizarEntrenamiento/${selectedEntrenamiento.id}`, selectedEntrenamiento);
       // Puedes mostrar una alerta de éxito aquí si lo deseas
     } catch (error) {
       console.error('Error al actualizar el Entrenamiento:', error);
@@ -49,24 +47,24 @@ function EditarEntrenamiento() {
 
   return (
     <div className="editar-entrenamiento-container">
-      <h2>Editar Entrenamiento - Curso {id}</h2>
+      <h2>Editar Entrenamientos - Rama {id}</h2>
       <div>
         <label>
-          Reservas:
+          Entrenamientos:
           <select
-            onChange={handleReservaChange}
-            value={selectedReserva ? selectedReserva.id : ''}
+            onChange={handleEntrenamientoChange}
+            value={selectedEntrenamiento ? selectedEntrenamiento.id : ''}
           >
             <option value="">Seleccione un Entrenamiento</option>
-            {reservas.map((reserva) => (
-              <option key={reserva.id} value={reserva.id}>
-                {`Dia: ${reserva.asistencia.fecha}, Hora Inicio: ${reserva.horaEntrada}, Hora Fin: ${reserva.horaSalida}`}
+            {entrenamientos.map((entrenamiento) => (
+  <           option key={entrenamiento.id} value={entrenamiento.id}>
+                {`Dia: ${entrenamiento.asistencia.fecha}, Hora Inicio: ${entrenamiento.horaEntrada}, Hora Fin: ${entrenamiento.horaSalida}`}
               </option>
             ))}
           </select>
         </label>
       </div>
-      {selectedReserva && (
+      {selectedEntrenamiento && (
         <div>
           <h3>Editar Entrenamiento</h3>
           <form onSubmit={handleSubmit}>
@@ -74,9 +72,9 @@ function EditarEntrenamiento() {
               Nueva hora de inicio:
               <input
                 type="time"
-                value={selectedReserva.horaEntrada}
+                value={selectedEntrenamiento.horaEntrada}
                 onChange={(e) =>
-                  setSelectedReserva({ ...selectedReserva, horaEntrada: e.target.value })
+                  setSelectedEntrenamiento({ ...selectedEntrenamiento, horaEntrada: e.target.value })
                 }
               />
             </label>
@@ -84,18 +82,18 @@ function EditarEntrenamiento() {
               Nueva hora de fin:
               <input
                 type="time"
-                value={selectedReserva.horaSalida}
+                value={selectedEntrenamiento.horaSalida}
                 onChange={(e) =>
-                  setSelectedReserva({ ...selectedReserva, horaSalida: e.target.value })
+                  setSelectedEntrenamiento({ ...selectedEntrenamiento, horaSalida: e.target.value })
                 }
               />
             </label>
             <label>
               Nueva descripción:
               <textarea
-                value={selectedReserva.descripcion}
+                value={selectedEntrenamiento.descripcion}
                 onChange={(e) =>
-                  setSelectedReserva({ ...selectedReserva, descripcion: e.target.value })
+                  setSelectedEntrenamiento({ ...selectedEntrenamiento, descripcion: e.target.value })
                 }
               />
             </label>

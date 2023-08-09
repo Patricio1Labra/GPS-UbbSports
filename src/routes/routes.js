@@ -1,7 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const { Entrenamiento } = require('../models/modelo');
+const { Estudiante } = require('../models/modelo');
+const { RamaDeportiva } = require('../models/modelo');
 const moment = require('moment'); // Importa el paquete moment
+
 
 router.post('/crearEntrenamientos/:idCurso', async (req, res) => {
   const { idCurso } = req.params;
@@ -30,52 +33,79 @@ router.post('/crearEntrenamientos/:idCurso', async (req, res) => {
   }
 });
 
-router.put('/actualizarReserva/:id', async (req, res) => {
-  const reservaId = req.params.id;
-  const { horaInicio, horaFin, descripcion } = req.body;
-
+router.put('/actualizarEntrenamiento/:id', async (req, res) => {
   try {
-    const reservaActualizada = await Entrenamiento.findByIdAndUpdate(
-      reservaId,
-      {
-        horaEntrada: horaInicio,
-        horaSalida: horaFin,
-        descripcion: descripcion
-      },
+    const idEntrenamiento = req.params.id;
+    const datosActualizados = req.body;
+    const entrenamientoActualizado = await Entrenamiento.findByIdAndUpdate(
+      idEntrenamiento,
+      { $set: datosActualizados },
       { new: true }
     );
-
-    if (!reservaActualizada) {
-      return res.status(404).json({ mensaje: 'Reserva no encontrada' });
-    }
-
-    res.status(200).json({ mensaje: 'Reserva actualizada exitosamente' });
+    res.json(entrenamientoActualizado);
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ mensaje: 'Error al actualizar la reserva' });
-  }
-});
-
-router.get('/obtenerReservasPorCurso/:idCurso', async (req, res) => {
-  const idCurso = req.params.idCurso;
-
-  try {
-    const reservas = await Entrenamiento.find({ nombreRama: idCurso }); // Busca las reservas con el mismo nombreRama (ID del curso)
-    res.status(200).json(reservas);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ mensaje: 'Error al obtener las reservas por curso' });
+    console.error('Error al actualizar el entrenamiento:', error);
+    res.status(500).json({ error: 'Error al actualizar el entrenamiento' });
   }
 });
 
 
-router.get('/api/obtenerRamas', async (req, res) => {
+
+router.get('/obtenerRamas', async (req, res) => {
   try {
-    const ramas = await RamaDeportiva.find();
+    const ramas = await RamaDeportiva.find(); // Consulta todas las ramas deportivas
     res.status(200).json(ramas);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ mensaje: 'Error al obtener las ramas' });
+    res.status(500).json({ mensaje: 'Error al obtener las ramas deportivas' });
+  }
+});
+
+router.get('/obtenerEntrenamientosPorRama/:idRama', async (req, res) => {
+  try {
+    const idRama = req.params.idRama;
+    const entrenamientos = await Entrenamiento.find({ nombreRama: idRama });
+    res.json(entrenamientos);
+  } catch (error) {
+    console.error('Error al obtener los entrenamientos por rama:', error);
+    res.status(500).json({ error: 'Error al obtener los entrenamientos por rama' });
+  }
+});
+
+
+router.get('/entrenamientos/:ramaNombre', async (req, res) => {
+  try {
+    const ramaNombre = req.params.ramaNombre;
+    const entrenamientos = await Entrenamiento.find({ nombreRama: ramaNombre });
+    res.json(entrenamientos);
+  } catch (error) {
+    res.status(500).json({ error: 'Error al obtener los entrenamientos.' });
+  }
+});
+
+// Guardar asistencia
+router.post('/asistencia', async (req, res) => {
+  try {
+    const { entrenamientoId, asistencia } = req.body;
+
+    // Encuentra el entrenamiento
+    const entrenamiento = await Entrenamiento.findById(entrenamientoId);
+
+    // Actualiza la asistencia de los estudiantes
+    asistencia.forEach(async (asistenciaEstudiante) => {
+      const estudiante = await Estudiante.findById(asistenciaEstudiante.estudianteId);
+      if (estudiante) {
+        // Actualiza la asistencia del estudiante en el entrenamiento
+        entrenamiento.asistencia[asistenciaEstudiante.estudianteId] = asistenciaEstudiante.estado;
+      }
+    });
+
+    // Guarda los cambios en el entrenamiento
+    await entrenamiento.save();
+
+    res.json({ message: 'Asistencia guardada exitosamente.' });
+  } catch (error) {
+    res.status(500).json({ error: 'Error al guardar la asistencia.' });
   }
 });
 

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import './edit.css';
 import axios from 'axios';
@@ -11,6 +11,11 @@ function CrearEntrenamiento() {
   const [horaInicio, setHoraInicio] = useState('');
   const [horaTermino, setHoraTermino] = useState('');
   const [descripcion, setDescripcion] = useState('');
+
+
+
+
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -52,7 +57,7 @@ function CrearEntrenamiento() {
 
   return (
     <div className="crear-entrenamiento-container">
-      <h2>Crear Entrenamiento - Curso {id}</h2>
+      <h2>Crear Entrenamiento -Curso {id}</h2>
       <form onSubmit={handleSubmit}>
         <label>
           Fecha:
