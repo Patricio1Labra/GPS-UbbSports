@@ -11,7 +11,7 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import "../Felipe/Home.css";
-import TemporaryDrawer from '../Felipe/Comps/TempEncargado.jsx';
+import TemporaryDrawer from '../Felipe/Comps/TempEntrenador.jsx';
 
 const CrearSolicitudRecursos = ({ user, setUser }) => {
     const [nombreSolicitante, setNombreSolicitante] = useState('');
@@ -21,6 +21,31 @@ const CrearSolicitudRecursos = ({ user, setUser }) => {
     const [participantes, setParticipantes] = useState('');
     const [showSuccessModal, setShowSuccessModal] = useState(false);
     const [showIncompleteFieldsModal, setShowIncompleteFieldsModal] = useState(false);
+    const [selectedRama, setSelectedRama] = useState('');
+    const [selectedEstudiante, setSelectedEstudiante] = useState([]);
+    const [ramas, setRamas] = useState([]);
+    const [estudiantes, setEstudiantes] = useState([]);
+
+    useEffect(() => {
+    // llamada a la API para obtener las ramas deportivas
+    axios.get('/api/ramasDeportivas')
+      .then(response => {
+        setRamas(response.data);
+      })
+      .catch(error => {
+        console.error('Error fetching data:', error);
+      });
+
+    // Llamada a la API para obtener los estudiantes
+    axios.get('/api/estudiantes')
+      .then(response => {
+        setEstudiantes(response.data);
+      })
+      .catch(error => {
+        console.error('Error fetching recintos:', error);
+      });
+    },
+    []);
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -53,6 +78,12 @@ const CrearSolicitudRecursos = ({ user, setUser }) => {
         setMenuOpen(!menuOpen);
       };
 
+    const handleChange = event => {
+        setSelectedRama(event.target.value);
+        const selectedOptions = Array.from(event.target.selectedOptions, option => option.value);
+        setSelectedEstudiante(selectedOptions);
+    };    
+    
     return (
         <div>
             <Box sx={{ flexGrow: 1 }}>
@@ -65,7 +96,7 @@ const CrearSolicitudRecursos = ({ user, setUser }) => {
                             aria-label="menu"
                             sx={{ mr: 2 }}
                         >
-                            <TemporaryDrawer open={menuOpen} onClose={handleMenuClick} style={{ color: 'black' }} />
+                        <TemporaryDrawer open={menuOpen} onClose={handleMenuClick} style={{ color: 'black' }} />
                         </IconButton>
                         <Typography className='texto1' variant="h6" style={{ color: 'white' }} component="div" sx={{ flexGrow: 1 }}>
                             <center><span style={{ color: 'white' }}>Bienvenido,</span> <span style={{ color: 'white' }}>{user.nombre}</span></center>
@@ -110,24 +141,26 @@ const CrearSolicitudRecursos = ({ user, setUser }) => {
                             />
                         </div>
                         <div className="mb-3">
-                            <label htmlFor="ramaSolicitante" className="form-label">Rama a la que pertenece el solicitante</label>
-                            <input
-                                type="text"
-                                className="form-control"
-                                id="tramaSolicitante"
-                                value={ramaSolicitante}
-                                onChange={(e) => setRamaSolicitante(e.target.value)}
-                            />
+                        <label htmlFor="descipcion" className="form-label">Sleccione la rama</label>
+                            <br />
+                            <select className='form-select m-10 w-100 align-self-center controls' value={selectedRama} onChange={handleChange}>
+                              <option value="">Seleccione una rama deportiva</option>
+                              {ramas.map(rama => (
+
+                                <option key={rama._id} value={rama.nombre}>{rama.nombre}</option>
+                              ))}
+                            </select>
                         </div>
                         <div className="mb-3">
-                            <label htmlFor="participantes" className="form-label">Participantes de la rama</label>
-                            <input
-                                type="text"
-                                className="form-control"
-                                id="participantes"
-                                value={participantes}
-                                onChange={(e) => setParticipantes(e.target.value)}
-                            />
+                            <label htmlFor="descipcion" className="form-label">Participantes de la rama</label>
+                            <br />
+                            <select className='form-select m-10 w-100 align-self-center controls' multiple value={selectedEstudiante} onChange={handleChange}>
+                              <option value="">Agregue estudiantes</option>
+                              {estudiantes.map(estudiante => (
+
+                                <option key={estudiante._id} value={estudiante.nombre}>{estudiante.nombre}</option>
+                              ))}
+                            </select>
                         </div>
                         <button type="submit" className="btn btn-dark"  style={{ backgroundColor: '#007bff' }}>Enviar solicitud de recursos</button>
                     </form>
