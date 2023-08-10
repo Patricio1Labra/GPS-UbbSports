@@ -48,8 +48,8 @@ const EstudianteSchema = new Schema({
     entrenador: String,
     horario: {
       dia: String,
-      horaInicio: Date,
-      horaSalida: Date
+      horaInicio: String,
+      horaSalida: String
     },
     recinto: String
 

@@ -50,7 +50,7 @@ export function Home1({ user, setUser }){
           </Toolbar>
         </AppBar>
       </Box>
-      <Container maxWidth="lg"  sx={{ mt: 4, mb: 4 }}>
+      <Container maxWidth="lg"  sx={{ mt: 2, mb: 4 }}>
             <Chart user={user} setUser={setUser}/>
           </Container>
     </div>

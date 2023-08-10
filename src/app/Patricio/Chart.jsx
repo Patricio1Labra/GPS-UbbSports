@@ -49,7 +49,7 @@ export default function Pagina({ user, setUser }) {
   }
   useEffect(() => {
     // Obtener información del estudiante y sus ramas registradas
-    fetch(`http://localhost:3000/api1/estudiantes/${estudianteId}`)
+    fetch(`/api1/estudiantes/${estudianteId}`)
       .then(response => response.json())
       .then(data => {
         setRamasEstudiante(data.ramaDeportiva); // Asignar las IDs de las ramas registradas por el estudiante
@@ -59,7 +59,7 @@ export default function Pagina({ user, setUser }) {
       });
 
     // Obtener todas las ramas
-    fetch('http://localhost:3000/api1/ramas')
+    fetch('/api1/ramas')
       .then(response => response.json())
       .then(data => {
         setRamas(data);
@@ -70,32 +70,76 @@ export default function Pagina({ user, setUser }) {
   }, [estudianteId]);
   
   useEffect(() => {
-    setRamasRegistradas(ramas.filter(rama => ramasEstudiante.includes(rama._id)));
-    setRamasNoRegistradas(ramas.filter(rama => !ramasEstudiante.includes(rama._id)));
+    setRamasRegistradas(ramas.filter(rama => ramasEstudiante.some(ramaEstudiante => ramaEstudiante._id === rama._id)));
+    setRamasNoRegistradas(ramas.filter(rama => !ramasEstudiante.some(ramaEstudiante => ramaEstudiante._id === rama._id)));
   }, [ramas, ramasEstudiante]);
 
-  const editarEstudiante = async (accion, ramaId) => {
+  const handleEditClick = async(isRegistered, item) => {
     try {
-      const response = await fetch(`http://localhost:3000/api1/estudiantes/${estudianteId}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ accion, ramaId })
-      });
-
-      if (response.ok) {
-        // Actualizar la lista de ramas del estudiante en el cliente
-        if (accion === 'agregar') {
-          setRamasEstudiante([...ramasEstudiante, ramaId]);
-        } else if (accion === 'eliminar') {
-          setRamasEstudiante(ramasEstudiante.filter(id => id !== ramaId));
+      if (isRegistered) {
+        const response = await fetch(`/api1/${estudianteId}/eliminarRama/${item._id}`, {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        });
+        if (response.ok) {
+          // Actualizar la lista de ramas del estudiante en el cliente
+          setRamasEstudiante(ramasEstudiante.filter(rama => rama._id !== item._id));
+          const response = await fetch(`/api1/ramas/${item._id}/eliminarAlumno/${user.nombre}`, {
+            method: 'DELETE'
+          });
+          if (response.ok) {
+            const ramaActualizada = await response.json();
+            console.log('Rama deportiva actualizada:', ramaActualizada);
+          } else {
+            const errorMessage = await response.text();
+            console.error('Error:', errorMessage);
+          }
+        } else {
+          console.error('Error al borrar la rama');
         }
       } else {
-        console.error('Error al editar el estudiante');
+        const requestBody = {
+          id: item._id,
+          nombre: item.nombre,
+          descripcion: item.descripcion,
+          entrenador: item.entrenador,
+          horario: item.horario,
+          recinto: item.recinto
+        };
+        
+        const nombreEstudiante = user.nombre;
+        const response = await fetch(`/api1/${estudianteId}/agregarRama`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(requestBody)
+        });
+        if (response.ok) {
+          // Actualizar la lista de ramas del estudiante en el cliente
+          setRamasEstudiante([...ramasEstudiante, item]);
+          const response = await fetch(`/api1/ramas/${item._id}/agregarAlumno`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ nombreEstudiante })
+          });
+          if (response.ok) {
+            const ramaActualizada = await response.json();
+            console.log('Rama deportiva actualizada:', ramaActualizada);
+          } else {
+            const errorMessage = await response.text();
+            console.error('Error:', errorMessage);
+          }
+        } else {
+          console.error('Error al agregar la rama');
+        }
       }
     } catch (error) {
-      console.error('Error al editar el estudiante:', error);
+      console.error('Error al editar rama:', error);
     }
   };
 
@@ -128,13 +172,7 @@ export default function Pagina({ user, setUser }) {
         </Collapse>
         <Box sx={{ display: 'flex', justifyContent: 'space-evenly' }}>
           <Tooltip title={isRegistered ? 'Eliminar Solicitud' : 'Solicitar'} followCursor>
-            <IconButton aria-label="" onClick={() => {
-                  if (isRegistered) {
-                    editarEstudiante('eliminar', item._id);
-                  } else {
-                    editarEstudiante('agregar', item._id);
-                  }
-                }}>
+            <IconButton aria-label="" onClick={() => handleEditClick(isRegistered, item)}>
               {isRegistered ? (
                 <RemoveCircleOutlineIcon sx={{ height: 38, width: 38 }} />
               ) : (
@@ -158,7 +196,7 @@ export default function Pagina({ user, setUser }) {
   };
 
   return (
-    <List sx={{ overflow: 'auto', paddingTop: '0' }}>
+    <List sx={{ overflow: 'auto', maxHeight: '85vh',paddingTop: '0' }}>
       {ramasRegistradas.slice(0).reverse().map((item, index) => (
         <ListItem sx={{ display: "block", paddingLeft: "0", paddingRight: "0", paddingTop: "0" }} key={index}>
           <Card>
