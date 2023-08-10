@@ -172,6 +172,28 @@ const FormularioInscripcion = ({ user, setUser }) => {
                             <input
                               class="controls"
                               type="text"
+                              name="descripcion"
+                              id="descripcion"
+                              placeholder="Ingrese una descrippcion para la rama"
+                              minlength="4" maxlenght="22" pattern="[a-zA-Z]+*"
+                              value={datos.descripcion}
+                              onChange={handleChange}
+                              required
+                            />
+                            <input
+                              class="controls"
+                              type="text"
+                              name="entrenador"
+                              id="entrenador"
+                              placeholder="Ingrese el entrenador a cargo"
+                              minlength="4" maxlength="22" pattern="[a-zA-Z]+*"
+                              value={datos.entrenador}
+                              onChange={handleChange}
+                              required
+                            />
+                            <input
+                              class="controls"
+                              type="text"
                               name="horarioDia"
                               id="horarioDia"
                               placeholder="Ingrese su el dia en que se realizara la rama"
@@ -180,7 +202,6 @@ const FormularioInscripcion = ({ user, setUser }) => {
                               onChange={handleChange}
                               required
                             />
-
                             <input
                               class="controls"
                               type="time"
@@ -198,17 +219,6 @@ const FormularioInscripcion = ({ user, setUser }) => {
                               id="horarioSalida"
                               placeholder="Ingrese el horario que quiere solicitar"
                               value={datos.horarioSalida}
-                              onChange={handleChange}
-                              required
-                            />
-                            <input
-                              class="controls"
-                              type="text"
-                              name="entrenador"
-                              id="entrenador"
-                              placeholder="Ingrese el entrenador a cargo"
-                              minlength="4" maxlength="22" pattern="[a-zA-Z]+*"
-                              value={datos.entrenador}
                               onChange={handleChange}
                               required
                             />

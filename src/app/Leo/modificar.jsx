@@ -186,56 +186,60 @@ const DropdownRamaDeportiva = ({ user, setUser }) => {
                           {editing && (
                             <div className='container '>
                               <form className="contact-form" onSubmit={handleFormSubmit}>
-                                Nombre:
                                 <input className='controls'
                                   type="text"
                                   name="nombre"
                                   value={editedData.nombre}
+                                  placeholder="Ingrese su Nombre pra la Rama Deportiva"
+                                  minlength="4" maxlenght="22" pattern="[a-zA-Z]+*"
                                   onChange={handleFormChange}
                                 />
-                                Descripción:
                                 <input className='controls'
                                   type="text"
                                   name="descripcion"
                                   value={editedData.descripcion}
+                                  placeholder="Ingrese una descrippcion para la rama"
+                                  minlength="4" maxlenght="22" pattern="[a-zA-Z]+*"
                                   onChange={handleFormChange}
                                 />
-                                Entrenador:
                                 <input className='controls'
                                   name="entrenador"
                                   type="text"
                                   value={editedData.entrenador}
+                                  placeholder="Ingrese el entrenador a cargo"
+                                  minlength="4" maxlenght="22" pattern="[a-zA-Z]+*"
                                   onChange={handleFormChange}
                                 />
-                                dia:
                                 <input className='controls'
                                   name="dia"
                                   type="text"
                                   value={editedData.dia}
+                                  placeholder="Ingrese su el dia en que se realizara la rama"
+                                  minlength="4" maxlenght="22" pattern="[a-zA-Z]+*"
                                   onChange={handleFormChange}
                                 />
-                                horaInicio:
                                 <input className='controls'
                                   name="horaInicio"
                                   type="time"
                                   value={editedData.horaInicio}
+                                  placeholder="Ingrese el horario que quiere solicitar"
                                   onChange={handleFormChange}
                                 />
-                                horaInicio:
                                 <input className='controls'
                                   name="HoraSalida"
                                   type="time"
                                   value={editedData.HoraSalida}
+                                  placeholder="Ingrese el horario que quiere solicitar"
                                   onChange={handleFormChange}
                                 />
-                                cupos:
                                 <input className='controls'
                                   name="cupos"
                                   type="number"
                                   value={editedData.cupos}
+                                  placeholder="Ingrese los cupos necesarios para su rama(Numeros!)"
+                                  minlength="1" maxlength="9" pattern="[0-9]"
                                   onChange={handleFormChange}
                                 />
-                                recinto:
                                 <select className='form-select m-10 w-100 align-self-center controls' name="recinto" value={editedData.recinto} onChange={handleFormChange}>
                                   <option value="">Seleccione un recinto deportivo</option>
                                   {recintos.map(recinto => (
