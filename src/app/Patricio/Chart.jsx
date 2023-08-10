@@ -8,7 +8,6 @@ import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 import Tooltip from '@mui/material/Tooltip';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import axios from 'axios';
 
 const ExpandMore  = styled((props) => {
   const { expand, ...other } = props;
@@ -87,6 +86,16 @@ export default function Pagina({ user, setUser }) {
         if (response.ok) {
           // Actualizar la lista de ramas del estudiante en el cliente
           setRamasEstudiante(ramasEstudiante.filter(rama => rama._id !== item._id));
+          const response = await fetch(`/api1/ramas/${item._id}/eliminarAlumno/${user.nombre}`, {
+            method: 'DELETE'
+          });
+          if (response.ok) {
+            const ramaActualizada = await response.json();
+            console.log('Rama deportiva actualizada:', ramaActualizada);
+          } else {
+            const errorMessage = await response.text();
+            console.error('Error:', errorMessage);
+          }
         } else {
           console.error('Error al borrar la rama');
         }
@@ -100,6 +109,7 @@ export default function Pagina({ user, setUser }) {
           recinto: item.recinto
         };
         
+        const nombreEstudiante = user.nombre;
         const response = await fetch(`/api1/${estudianteId}/agregarRama`, {
           method: 'POST',
           headers: {
@@ -110,6 +120,20 @@ export default function Pagina({ user, setUser }) {
         if (response.ok) {
           // Actualizar la lista de ramas del estudiante en el cliente
           setRamasEstudiante([...ramasEstudiante, item]);
+          const response = await fetch(`/api1/ramas/${item._id}/agregarAlumno`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ nombreEstudiante })
+          });
+          if (response.ok) {
+            const ramaActualizada = await response.json();
+            console.log('Rama deportiva actualizada:', ramaActualizada);
+          } else {
+            const errorMessage = await response.text();
+            console.error('Error:', errorMessage);
+          }
         } else {
           console.error('Error al agregar la ramma');
         }

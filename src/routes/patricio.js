@@ -61,29 +61,6 @@ router.get('/ramas', async (req, res) => {
       res.status(500).json({ error: 'Error al crear estudiante' });
     }
   });
-  
-  router.post('/ramas', async (req, res) => {
-    try {
-      const nuevaRama = await RamaDeportiva.create(req.body);
-      res.status(201).json(nuevaRama);
-    } catch (error) {
-      res.status(500).json({ error: 'Error al crear rama' });
-    }
-  });
-
-  router.put('/ramas/:id', async (req, res) => {
-    try {
-      const ramaId = req.params.id;
-      const ramaEditada = await RamaDeportiva.findByIdAndUpdate(
-        ramaId,
-        req.body,
-        { new: true }
-      );
-      res.json(ramaEditada);
-    } catch (error) {
-      res.status(500).json({ error: 'Error al editar rama' });
-    }
-  });
 
   router.post('/:estudianteId/agregarRama', async (req, res) => {
     try {
@@ -128,6 +105,54 @@ router.get('/ramas', async (req, res) => {
       res.json(updatedEstudiante);
     } catch (error) {
       res.status(500).json({ message: error.message });
+    }
+  });
+
+  router.post('/ramas/:ramaId/agregarAlumno', async (req, res) => {
+    try {
+      const ramaId = req.params.ramaId;
+      const { nombreEstudiante } = req.body;
+  
+      // Buscar la rama deportiva por su ID
+      const rama = await RamaDeportiva.findById(ramaId);
+  
+      if (!rama) {
+        return res.status(404).json({ mensaje: 'Rama deportiva no encontrada' });
+      }
+  
+      // Agregar el nombre del estudiante al arreglo de alumnos
+      rama.alumnos.push(nombreEstudiante);
+  
+      // Guardar la rama deportiva actualizada en la base de datos
+      const ramaActualizada = await rama.save();
+  
+      res.json(ramaActualizada);
+    } catch (error) {
+      res.status(500).json({ mensaje: 'Error al agregar alumno', error: error.message });
+    }
+  });
+
+  router.delete('/ramas/:ramaId/eliminarAlumno/:nombreEstudiante', async (req, res) => {
+    try {
+      const ramaId = req.params.ramaId;
+      const nombreEstudiante = req.params.nombreEstudiante;
+  
+      // Buscar la rama deportiva por su ID
+      const rama = await RamaDeportiva.findById(ramaId);
+  
+      if (!rama) {
+        return res.status(404).json({ mensaje: 'Rama deportiva no encontrada' });
+      }
+  
+      // Eliminar el alumno del arreglo de alumnos
+      rama.alumnos = rama.alumnos.filter(alumno => alumno !== nombreEstudiante);
+  
+      // Guardar la rama deportiva actualizada en la base de datos
+      const ramaActualizada = await rama.save();
+  
+      res.json(ramaActualizada);
+    } catch (error) {
+      res.status(500).json({ mensaje: 'Error al eliminar alumno', error: error.message });
     }
   });
 
