@@ -29,7 +29,30 @@ const SolicitudRecintoSchema = new Schema({
   estadosolicitud: String,
   RecintoDeportivo: String
 });
+// Esquema para Estudiante
+const EstudianteSchema = new Schema({
+  nombre: String,
+  carrera: String,
+  correo: String,
+  rut: String,
+  telefono: String,
+  descripcion: String,
+  contraseña: String,
+  ramaDeportiva: [{
+    nombre: String,
+    descripcion: String,
+    entrenador: String,
+    horario: {
+      dia: String,
+      horaInicio: String,
+      horaSalida: String
+    },
+    recinto: String
 
+  }],
+  implementosSolicitados: [String],
+  recintoSolicitado: String
+});
 
 // Esquema para Recinto Deportivo
 const RecintoDeportivoSchema = new Schema({
@@ -49,19 +72,6 @@ const EntrenamientoSchema = new Schema({
   nombreRama: String
 });
 
-
-const EstudianteSchema = new Schema({ 
-   nombre: String, 
-   carrera: String, 
-   correo: String, 
-   rut: String, 
-   telefono: String, 
-   descripcion: String, 
-   contraseña: String, 
-   ramaDeportiva: [String], 
-   implementosSolicitados: [String], 
-   recintoSolicitado: String 
- });
 // Esquema para Encargado
 const EncargadoSchema = new Schema({
   nombre: String,

@@ -8,6 +8,7 @@ import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 import Tooltip from '@mui/material/Tooltip';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import axios from 'axios';
 
 const ExpandMore  = styled((props) => {
   const { expand, ...other } = props;
@@ -49,7 +50,7 @@ export default function Pagina({ user, setUser }) {
   }
   useEffect(() => {
     // Obtener información del estudiante y sus ramas registradas
-    fetch(`http://localhost:3000/api1/estudiantes/${estudianteId}`)
+    fetch(`/api1/estudiantes/${estudianteId}`)
       .then(response => response.json())
       .then(data => {
         setRamasEstudiante(data.ramaDeportiva); // Asignar las IDs de las ramas registradas por el estudiante
@@ -59,7 +60,7 @@ export default function Pagina({ user, setUser }) {
       });
 
     // Obtener todas las ramas
-    fetch('http://localhost:3000/api1/ramas')
+    fetch('/api1/ramas')
       .then(response => response.json())
       .then(data => {
         setRamas(data);
@@ -74,28 +75,21 @@ export default function Pagina({ user, setUser }) {
     setRamasNoRegistradas(ramas.filter(rama => !ramasEstudiante.includes(rama._id)));
   }, [ramas, ramasEstudiante]);
 
-  const editarEstudiante = async (accion, ramaId) => {
+  const handleEditClick = (isRegistered, item) => {
     try {
-      const response = await fetch(`http://localhost:3000/api1/estudiantes/${estudianteId}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ accion, ramaId })
-      });
-
-      if (response.ok) {
-        // Actualizar la lista de ramas del estudiante en el cliente
-        if (accion === 'agregar') {
-          setRamasEstudiante([...ramasEstudiante, ramaId]);
-        } else if (accion === 'eliminar') {
-          setRamasEstudiante(ramasEstudiante.filter(id => id !== ramaId));
-        }
+      if (isRegistered) {
+        axios.delete(`/api1/${estudianteId}/eliminarRama/${item._id}`);
       } else {
-        console.error('Error al editar el estudiante');
+        axios.post(`/api1/${estudianteId}/agregarRama`, {
+          nombre: item.nombre,
+          descripcion: item.descripcion,
+          entrenador: item.entrenador,
+          horario: item.horario,
+          recinto: item.recinto
+        });
       }
     } catch (error) {
-      console.error('Error al editar el estudiante:', error);
+      console.error('Error al editar rama:', error);
     }
   };
 
@@ -128,13 +122,7 @@ export default function Pagina({ user, setUser }) {
         </Collapse>
         <Box sx={{ display: 'flex', justifyContent: 'space-evenly' }}>
           <Tooltip title={isRegistered ? 'Eliminar Solicitud' : 'Solicitar'} followCursor>
-            <IconButton aria-label="" onClick={() => {
-                  if (isRegistered) {
-                    editarEstudiante('eliminar', item._id);
-                  } else {
-                    editarEstudiante('agregar', item._id);
-                  }
-                }}>
+            <IconButton aria-label="" onClick={() => handleEditClick(isRegistered, item)}>
               {isRegistered ? (
                 <RemoveCircleOutlineIcon sx={{ height: 38, width: 38 }} />
               ) : (
@@ -158,7 +146,7 @@ export default function Pagina({ user, setUser }) {
   };
 
   return (
-    <List sx={{ overflow: 'auto', paddingTop: '0' }}>
+    <List sx={{ overflow: 'auto', maxHeight: '85vh',paddingTop: '0' }}>
       {ramasRegistradas.slice(0).reverse().map((item, index) => (
         <ListItem sx={{ display: "block", paddingLeft: "0", paddingRight: "0", paddingTop: "0" }} key={index}>
           <Card>
