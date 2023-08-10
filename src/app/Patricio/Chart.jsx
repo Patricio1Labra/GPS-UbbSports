@@ -146,7 +146,7 @@ export default function Pagina({ user, setUser }) {
   const generateCardContent = (item, isRegistered) => {
     return (
       <>
-        <CardContent sx={{ display: 'flex', justifyContent: 'center' }}>
+        <CardContent sx={{ display: 'flex', justifyContent: 'center' , bgcolor: '#007bff'}}>
           {item.nombre}
         </CardContent>
         <CardContent>
