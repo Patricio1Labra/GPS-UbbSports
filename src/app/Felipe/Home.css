@@ -1,52 +1,88 @@
 .barra{
-    background-color: #007bff;
+  background-color: #007bff;
 }
 .texto1{
-    color: white;
+  color: white;
 }
 .responsive-menu {
-    position: fixed;
-    top: 60px; /* Ajusta la posición vertical del menú */
-    left: 0;
-    width: 100%;
-    background-color: white;
-    box-shadow: 0px 2px 4px rgba(255, 255, 255, 0.1);
-    z-index: 1; /* Asegura que el menú aparezca encima del contenido */
-  }
-  .responsive-menu ul {
-    list-style: none;
-    padding: 0;
-  }
-  .responsive-menu li {
-    padding: 10px 20px;
-    border-bottom: 1px solid #eee; /* Línea divisoria entre elementos del menú */
-  }
-  
-  .responsive-menu li:last-child {
-    border-bottom: none; /* No aplicar línea divisoria al último elemento */
-  }
-  
-  .responsive-menu a {
-    text-decoration: none;
-    color: black;
-  }
-  
-  .responsive-menu a:hover {
-    color: #000000; /* Cambio de color al pasar el cursor */
-  }
+  position: fixed;
+  top: 60px; /* Ajusta la posición vertical del menú */
+  left: 0;
+  width: 100%;
+  background-color: white;
+  box-shadow: 0px 2px 4px rgba(255, 255, 255, 0.1);
+  z-index: 1; /* Asegura que el menú aparezca encima del contenido */
+}
+.responsive-menu ul {
+  list-style: none;
+  padding: 0;
+}
+.responsive-menu li {
+  padding: 10px 20px;
+  border-bottom: 1px solid #eee; /* Línea divisoria entre elementos del menú */
+}
+
+.responsive-menu li:last-child {
+  border-bottom: none; /* No aplicar línea divisoria al último elemento */
+}
+
+.responsive-menu a {
+  text-decoration: none;
+  color: black;
+}
+
+.responsive-menu a:hover {
+  color: #000000; /* Cambio de color al pasar el cursor */
+}
+.solicitudes-container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* Dos columnas */
+  gap: 10px; /* Espacio entre las columnas y filas */
+  justify-content: center;
+  border: 1px solid #ccc;
+  padding: 10px;
+}
+
+.solicitud-item {
+display: flex;
+align-items: center;
+justify-content: space-between;
+border: 1px solid gray;
+padding: 10px;
+margin: 10px; /* Espacio interno para el borde */
+}
+.info {
+flex: 1;
+}
 .sidebar {
-  width: 14rem;
-  height: calc(100vh - 52px);
-  border-right: 1px solid var(--grey);
-  background-color: var(--primary);
-    ul {
-      list-style: none;
-      padding: 1rem 2rem;
-        li {
-          margin-bottom: 1rem;
-            a{
-                text-decoration: none;
-            }
-        }
-    }
+width: 14rem;
+height: calc(100vh - 52px);
+border-right: 1px solid var(--grey);
+background-color: var(--primary);
+  ul {
+    list-style: none;
+    padding: 1rem 2rem;
+      li {
+        margin-bottom: 1rem;
+          a{
+              text-decoration: none;
+          }
+      }
+  }
+}
+
+.icon-container {
+display: flex;
+justify-content: center;
+align-items: center;
+}
+
+.icon-wrapper {
+display: flex;
+gap: 5px; /* Espacio entre el ícono de aceptar y rechazar */
+}
+
+.solicitudes-container-scroll {
+max-height: 70vh; /* Ajusta la altura máxima según tus preferencias */
+overflow-y: auto;
 }

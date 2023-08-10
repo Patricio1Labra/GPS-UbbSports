@@ -3,7 +3,7 @@ import sport from '../assets/sports.png';
 import axios from 'axios';
 import { Route, useNavigate } from 'react-router-dom';
 import './Formulario.css'
-
+import { OverlayTrigger, Popover } from 'react-bootstrap';
 export function Formulario({ user, setUser }) {
 
   const [rut, SetRut] = useState("");
@@ -12,10 +12,36 @@ export function Formulario({ user, setUser }) {
   const [error, setError] = useState(false);
   const navigate = useNavigate();
 
+  function validarRut(rut) {
+    const cleanRut = rut.replace(/[^0-9kK]/g, '').toUpperCase();
+  
+    if (cleanRut.length < 2) {
+      return false;
+    }
+  
+    const rutNumbers = cleanRut.slice(0, -1);
+    const verificadorIngresado = cleanRut.slice(-1);
+    const rutWithoutDots = rutNumbers.replace(/\./g, '');
+    let sum = 0;
+    let factor = 2;
+  
+    for (let i = rutWithoutDots.length - 1; i >= 0; i--) {
+      sum += parseInt(rutWithoutDots.charAt(i), 10) * factor;
+      factor = factor === 7 ? 2 : factor + 1;
+    }
+  
+    const dvExpected = 11 - (sum % 11);
+    const dv = dvExpected === 11 ? '0' : dvExpected === 10 ? 'K' : String(dvExpected);
+  
+    return dv === verificadorIngresado;
+  }
   
   const handleSubmit = async (event) => {
     event.preventDefault();
-    
+    if(!validarRut(rut)){
+      setErrorRut(true);
+      return;
+    }
     try {
       const response = await axios.post('/api/login', {
         rut: rut,
@@ -43,30 +69,19 @@ export function Formulario({ user, setUser }) {
     }
   };
 
-  function validarRut(rut) {
-    const cleanRut = rut.replace(/[^0-9kK]/g, '').toUpperCase();
-  
-    if (cleanRut.length < 2) {
-      return false;
-    }
-  
-    const rutNumbers = cleanRut.slice(0, -1);
-    const verificadorIngresado = cleanRut.slice(-1);
-    const rutWithoutDots = rutNumbers.replace(/\./g, '');
-    let sum = 0;
-    let factor = 2;
-  
-    for (let i = rutWithoutDots.length - 1; i >= 0; i--) {
-      sum += parseInt(rutWithoutDots.charAt(i), 10) * factor;
-      factor = factor === 7 ? 2 : factor + 1;
-    }
-  
-    const dvExpected = 11 - (sum % 11);
-    const dv = dvExpected === 11 ? '0' : dvExpected === 10 ? 'K' : String(dvExpected);
-  
-    return dv === verificadorIngresado;
-  }
-  
+  const rutPopover = (
+    <Popover id="popover-basic">
+    <Popover.Header as="h3" className="popover-header">
+      RUT inválido
+      <span className="popover-close-button" onClick={() => setErrorRut(false)}>
+        X
+      </span>
+    </Popover.Header>
+    <Popover.Body>
+      Por favor, ingrese un RUT válido.
+    </Popover.Body>
+  </Popover>
+);
 
   return (
     <div>
@@ -103,14 +118,20 @@ export function Formulario({ user, setUser }) {
           />
         </div>
         <center>
+          {/* Utilizamos OverlayTrigger para mostrar el popover */}
+          <OverlayTrigger
+            trigger="click"
+            placement="top"
+            show={errorRut}
+            overlay={rutPopover}
+          >
+        
           <button className="botonini" onClick={handleSubmit}>
             Iniciar Sesión
           </button>
-        </center>
+          </OverlayTrigger>
+          </center>
       </form>
-      {errorRut && (
-        <p className="msj">RUT inválido. Por favor, ingrese un RUT válido.</p>
-      )}
       {error && (
         <p className="msj">
           Credenciales inválidas. Por favor, verifique sus datos.

@@ -1,4 +1,3 @@
-
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
 import Button from '@mui/material/Button';
@@ -10,12 +9,14 @@ import ListItemText from '@mui/material/ListItemText';
 import MenuIcon from '@mui/icons-material/Menu';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { Link } from 'react-router-dom';
-import HomeEncargado from '../HomeEncargado.jsx'; // Ajusta la ruta según corresponda
 import '../Home.css';
 import React, { useState, useEffect } from 'react';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
+import { format } from 'date-fns';
+import CheckBoxIcon from '@mui/icons-material/CheckBox';
+import BlockIcon from '@mui/icons-material/Block';
 
 export function VerSolicitudesImplemento(user, setUser) {
     
@@ -29,6 +30,11 @@ export function VerSolicitudesImplemento(user, setUser) {
                 if (response.ok) {
                     const data = await response.json();
                     setSolicitudes(data);
+                    const iniciaBotones = {};
+                    data.forEach(solicitud =>{
+                      iniciaBotones[solicitud._id] = false;
+                    });
+                    setBotonesDeshabilitados(iniciaBotones);
                 } else {
                     console.error('Error al obtener las solicitudes de implementos');
                 }
@@ -50,6 +56,10 @@ export function VerSolicitudesImplemento(user, setUser) {
     
             if (response.ok) {
                 // Actualizar el estado de la solicitud en el frontend
+                setBotonesDeshabilitados(prevState =>({
+                  ...prevState,
+                  [solicitud._id]: true
+                }));
                 const updatedSolicitudes = solicitudes.map((s) =>
                     s.nombre === solicitud.nombre ? { ...s, estadosolicitud: 'Aceptada' } : s
                 );
@@ -73,6 +83,10 @@ export function VerSolicitudesImplemento(user, setUser) {
     
             if (response.ok) {
                 // Actualizar el estado de la solicitud en el frontend
+                setBotonesDeshabilitados(prevState =>({
+                  ...prevState,
+                  [solicitud._id]: true
+                }));
                 const updatedSolicitudes = solicitudes.map((s) =>
                     s.nombre === solicitud.nombre ? { ...s, estadosolicitud: 'Rechazada' } : s
                 );
@@ -84,12 +98,6 @@ export function VerSolicitudesImplemento(user, setUser) {
             console.error('Error al rechazar la solicitud', error);
         }
     };
-
-const handleLogout = () => {
-    setUser([]); // Reset user state
-    localStorage.removeItem('user'); // Clear user data from localStorage
-    window.location.href = '/'; // Redirect to login page
-};
   const [state, setState] = useState({
     left: false,
   });
@@ -129,9 +137,6 @@ const handleLogout = () => {
           <Typography variant="h6" color="inherit" component="div" sx={{ flexGrow: 1 }}>
             Solicitud de Implementos
           </Typography>
-          <Button style={{ color: 'white' }} onClick={handleLogout}>
-            Cerrar Sesión
-          </Button>
         </Toolbar>
       </AppBar>
       <Drawer anchor="left" open={state.left} onClose={toggleDrawer('left', false)}>
@@ -139,31 +144,51 @@ const handleLogout = () => {
       </Drawer>
       <center>
       <Box p={2}  justifyContent="center"minHeight="100vh">
-        {solicitudes.map((solicitud) => (
-          <div key={solicitud._id}>
-            <Typography variant="h6">Nombre: {solicitud.nombre}</Typography>
-            <Typography>Descripción: {solicitud.descripcion}</Typography>
-            <Typography>Cantidad: {solicitud.cantidad}</Typography>
-            <Typography>Fecha de Solicitud: {solicitud.fechadesolicitud}</Typography>
-            <Typography>Estado de Solicitud: {solicitud.estadosolicitud}</Typography>
-            {/* Agregar botones de aceptar y rechazar aquí */}
-            <Button variant="contained"
-            color="primary"
-            onClick={() => handleAceptarSolicitud(solicitud)}
-            style={{ marginRight: '10px' }}
-            >
-              Aceptar
-            </Button>
-            <Button variant="contained"
-                color="secondary"
-                onClick={() => handleRechazarSolicitud(solicitud)}
-                style={{ marginLeft: '10px' }}
-                >
-              Rechazar
-            </Button>
-            <hr style={{ width: '20%', margin: '10px auto' }} />
+      <div className="solicitudes-container-scroll">
+      <div className="solicitudes-container">
+  {solicitudes.map((solicitud, index) => (
+    <div key={solicitud._id} className="solicitud-item">
+      <div className="info">
+      <Typography variant="h6">{solicitud.nombre}</Typography>
+      <Typography>Descripción: {solicitud.descripcion}</Typography>
+      <Typography>Cantidad: {solicitud.cantidad}</Typography>
+      </div>
+      <div className="info">
+      <Typography>
+        Fecha de Solicitud: {format(new Date(solicitud.fechadesolicitud), 'dd/MM/yyyy')}
+      </Typography>
+      <Typography>Estado de Solicitud: {solicitud.estadosolicitud}</Typography>
+      </div>
+      <div className="icon-container">
+        {solicitud.estadosolicitud === 'Pendiente' && !botonesDeshabilitados[index] && (
+          <div className="icon-wrapper">
+            <CheckBoxIcon
+              onClick={() => handleAceptarSolicitud(solicitud, index)}
+              className="icon1"
+              style={{ fontSize: 40, color: 'green' }}
+            />
           </div>
-        ))}
+        )}
+        {solicitud.estadosolicitud === 'Pendiente' && !botonesDeshabilitados[index] && (
+          <div className="icon-wrapper">
+            <BlockIcon
+              onClick={() => handleRechazarSolicitud(solicitud, index)}
+              className="icon2"
+              style={{ fontSize: 40, color: 'red' }}
+            />
+          </div>
+        )}
+        {solicitud.estadosolicitud === 'Aceptada' && (
+          <CheckBoxIcon className="icon-aceptada" style={{ fontSize: 40, color: 'green' }} />
+        )}
+        {solicitud.estadosolicitud === 'Rechazada' && (
+          <BlockIcon className="icon-rechazada" style={{ fontSize: 40, color: 'red' }} />
+        )}
+      </div>
+    </div>
+  ))}
+</div>
+</div>
       </Box>
       </center>
     </div>
