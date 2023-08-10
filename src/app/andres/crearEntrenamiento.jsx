@@ -64,7 +64,7 @@ function CrearEntrenamiento({ user, setUser }) {
         text: 'El entrenamiento ha sido guardado correctamente.',
       });
 
-      navigate('/'); // Redirige a la página de inicio
+      navigate('/ver-rama'); // Redirige a la página de inicio
     } catch (error) {
       console.error(error);
       Swal.fire({

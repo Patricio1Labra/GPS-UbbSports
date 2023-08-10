@@ -81,7 +81,7 @@ function VerRama({ user, setUser }) {
                     <button>Crear Entrenamiento</button>
                   </Link>
                   <Link to={`/editar-entrenamiento/${rama.nombre}`}>
-                    <button>Editar Entrenamiento</button>
+                    <button>Ver Entrenamientos</button>
                   </Link>
                 </div>
               </div>

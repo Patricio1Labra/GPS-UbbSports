@@ -2,28 +2,39 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import './edit.css';
 import axios from 'axios';
-import { useSpring, animated } from 'react-spring';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Swal from 'sweetalert2';
-import { useNavigate } from 'react-router-dom';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
-import "../Felipe/Home.css";
 import TemporaryDrawer from '../Felipe/Comps/TempEncargado.jsx';
-
+import moment from 'moment';
+import 'moment/locale/es'; // Configura el idioma para español
 
 function EditarEntrenamiento({ user, setUser }) {
   const { id } = useParams();
   const [entrenamientos, setEntrenamientos] = useState([]);
-  const [selectedEntrenamiento, setSelectedEntrenamiento] = useState([]);
-  const [nuevaFecha, setNuevaFecha] = useState('');
-  const [nuevaHoraInicio, setNuevaHoraInicio] = useState('');
-  const [nuevaHoraFin, setNuevaHoraFin] = useState('');
-  const [nuevaDescripcion, setNuevaDescripcion] = useState('');
+  const [editing, setEditing] = useState(false);
+  const [selectedEntrenamiento, setSelectedEntrenamiento] = useState('');
+  const [editEntrenamiento, setEditEntrenamiento] = useState({
+    nombre: '',
+    horaEntrada: '',
+    horaSalida: '',
+    descripcion: '',
+  });
+
+  const handleLogout = () => {
+    setUser([]); // Reset user state
+    localStorage.removeItem('user'); // Clear user data from localStorage
+    window.location.href = '/'; // Redirect to login page
+  };
+
+  const handleMenuClick = () => {
+    setMenuOpen(!menuOpen);
+  };
 
   useEffect(() => {
     async function fetchEntrenamientos() {
@@ -38,155 +49,110 @@ function EditarEntrenamiento({ user, setUser }) {
     fetchEntrenamientos();
   }, [id]);
 
-  const handleLogout = () => {
-    setUser([]); // Reset user state
-    localStorage.removeItem('user'); // Clear user data from localStorage
-    window.location.href = '/'; // Redirect to login page
-  };
-  const [menuOpen, setMenuOpen] = useState("");
-  const handleMenuClick = () => {
-    setMenuOpen(!menuOpen);
+  const handleChange = (event) => {
+    setSelectedEntrenamiento(event.target.value);
   };
 
-
-
-
-  const handleEntrenamientoChange = (e) => {
-    const entrenamientoId = e.target.value;
-    const selected = entrenamientos.find((entrenamiento) => entrenamiento.id === entrenamientoId);
-
+  const handleEditClick = () => {
+    setEditing(true);
+    const selected = entrenamientos.find((entrenamiento) => entrenamiento._id === selectedEntrenamiento);
     if (selected) {
-      setSelectedEntrenamiento(selected);
-      setNuevaFecha(selected.asistencia.fecha || '');
-      setNuevaHoraInicio(selected.horaEntrada || '');
-      setNuevaHoraFin(selected.horaSalida || '');
-      setNuevaDescripcion(selected.descripcion || '');
-    } else {
-      setSelectedEntrenamiento(null);
-      setNuevaFecha('');
-      setNuevaHoraInicio('');
-      setNuevaHoraFin('');
-      setNuevaDescripcion('');
+      setEditEntrenamiento(selected);
     }
+  };
+
+  const handleEntrenamientoChange = (event) => {
+    const { name, value } = event.target;
+    setEditEntrenamiento((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!selectedEntrenamiento) {
-      return;
-    }
-    try {
-      const datosActualizados = {
-        asistencia: {
-          fecha: nuevaFecha,
-          estado: selectedEntrenamiento.asistencia.estado,
-        },
-        horaEntrada: nuevaHoraInicio,
-        horaSalida: nuevaHoraFin,
-        descripcion: nuevaDescripcion,
-      };
+    await axios.get(`/api/obtenerEntrenamientosPorRama/${id}`);
+    await axios
+      .put(`/api/actualizarEntrenamiento/${selectedEntrenamiento.id}`, editEntrenamiento)
+      .then((response) => {
+        console.log('Data updated successfully:', response.data);
+        setEditing(false);
+        Swal.fire({
+          icon: 'success',
+          title: '¡Inscripción enviada!',
+          text: 'La inscripción se ha enviado exitosamente.',
+        });
 
-      await axios.put(`/api/actualizarEntrenamiento/${selectedEntrenamiento.id}`, datosActualizados);
+        navigate('/ver-rama'); // Redirige a la página de inicio
+      })
+      .catch((error) => {
+        console.error('Error updating data:', error);
+        Swal.fire({
+          icon: 'error',
+          title: 'Error al enviar la inscripción',
+          text: 'Hubo un problema al enviar la inscripción. Por favor, inténtalo nuevamente.',
+        });
+      });
+  };
+  const formatDate = (date) => {
+    return moment(date).format('DD/MM/YYYY');
+  };
 
-      const response = await axios.get(`/api/obtenerEntrenamientosPorRama/${id}`);
-      setEntrenamientos(response.data);
-
-      setSelectedEntrenamiento(null);
-      setNuevaFecha('');
-      setNuevaHoraInicio('');
-      setNuevaHoraFin('');
-      setNuevaDescripcion('');
-
-      // Puedes mostrar una alerta de éxito aquí si lo deseas
-    } catch (error) {
-      console.error('Error al actualizar el Entrenamiento:', error);
-      // Puedes mostrar una alerta de error aquí si lo deseas
-    }
+  // Función para formatear la hora a 'h/m/s'
+  const formatTime = (time) => {
+    return moment(time, 'HH:mm:ss').format('HH:mm:ss');
   };
 
   return (
     <div>
       <Box sx={{ flexGrow: 1 }}>
         <AppBar position="static">
-          <Toolbar className="barra" style={{ color: 'white' }}>
-            <IconButton
-              size="large"
-              edge="start"
-              color="inherit"
-              aria-label="menu"
-              sx={{ mr: 2 }}
-            >
-              <TemporaryDrawer open={menuOpen} onClose={handleMenuClick} style={{ color: 'black' }} />
-            </IconButton>
-            <Typography className='texto1' variant="h6" style={{ color: 'white' }} component="div" sx={{ flexGrow: 1 }}>
-              <center><span style={{ color: 'white' }}>Bienvenido,</span> <span style={{ color: 'white' }}>{user.nombre}</span></center>
-            </Typography>
-            <Button onClick={handleLogout} style={{ color: 'white' }} color="inherit">Cerrar Sesión</Button>
-          </Toolbar>
+          {/* ... (código de la barra de navegación) */}
         </AppBar>
       </Box>
       <div className="editar-entrenamiento-container">
         <h2>Editar Entrenamientos - Rama {id}</h2>
         <div>
-          <label>
-            Entrenamientos:
-            <select
-              onChange={handleEntrenamientoChange}
-              value={selectedEntrenamiento ? selectedEntrenamiento.id : ''}
-            >
-              <option value="">Seleccione un Entrenamiento</option>
-              {Array.isArray(entrenamientos) ? (
-                entrenamientos.map((entrenamiento) => (
-                  <option key={entrenamiento.id} value={entrenamiento.id}>
-                    {`Dia: ${entrenamiento.asistencia.fecha}, Hora Inicio: ${entrenamiento.horaEntrada}, Hora Fin: ${entrenamiento.horaSalida}`}
-                  </option>
-                ))
-              ) : (
-                <option value="">No hay entrenamientos disponibles</option>
-              )}
-            </select>
-          </label>
+          {/* Selección del entrenamiento */}
+          {/* ... (código de selección de entrenamiento) */}
         </div>
-        {selectedEntrenamiento && (
+        {editing && (
           <div>
             <h3>Editar Entrenamiento</h3>
             <form onSubmit={handleSubmit}>
-              <label>
-                Nueva Fecha:
-                <input
-                  type="date"
-                  value={nuevaFecha}
-                  onChange={(e) => setNuevaFecha(e.target.value)}
-                />
-              </label>
-              <label>
-                Nueva hora de inicio:
-                <input
-                  type="time"
-                  value={nuevaHoraInicio}
-                  onChange={(e) => setNuevaHoraInicio(e.target.value)}
-                />
-              </label>
-              <label>
-                Nueva hora de fin:
-                <input
-                  type="time"
-                  value={nuevaHoraFin}
-                  onChange={(e) => setNuevaHoraFin(e.target.value)}
-                />
-              </label>
-              <label>
-                Nueva descripción:
-                <textarea
-                  value={nuevaDescripcion}
-                  onChange={(e) => setNuevaDescripcion(e.target.value)}
-                />
-              </label>
-              <button type="submit">Guardar cambios</button>
+              {/* Campos de edición */}
+              {/* ... (campos de edición) */}
             </form>
           </div>
         )}
+
+        {/* Lista de entrenamientos */}
+        <div>
+          <h3>Lista de Entrenamientos</h3>
+          <table className="table">
+            <thead>
+              <tr>
+                <th>Nombre de Rama</th>
+                <th>Fecha</th>
+                <th>Hora de Inicio</th>
+                <th>Hora de Fin</th>
+                <th>Descripción</th>
+              </tr>
+            </thead>
+            <tbody>
+              {entrenamientos.map((entrenamiento) => (
+                <tr key={entrenamiento._id}>
+                  <td>{entrenamiento.nombreRama}</td>
+                  <td>{formatDate(entrenamiento.asistencia.fecha)}</td>
+                  <td>{formatTime(entrenamiento.horaEntrada)}</td>
+                  <td>{formatTime(entrenamiento.horaSalida)}</td>
+                  <td>{entrenamiento.descripcion}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );

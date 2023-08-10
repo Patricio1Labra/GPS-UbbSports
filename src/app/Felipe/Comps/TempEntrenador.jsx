@@ -34,7 +34,7 @@ export function TempEntrenador() {
 
   const menuItems = [
     { text: 'Solicitar Implementos', icon: <FitnessCenterIcon />, path: '/solicitar-implementos' },
-    { text: 'Ver Ramas', icon: <LibraryBooksIcon />, path: '/ver-ramas' },
+    { text: 'Ver Rama', icon: <LibraryBooksIcon />, path: '/ver-rama' },
     { text: 'Nuevo Entrenamiento', icon: <SportsMartialArtsIcon />, path: '/crear-entrenamiento' },
     { text: 'Editar Entrenamiento', icon: <EditIcon />, path: '/editar-entrenamiento' },
     { text: 'Crear Solicitud de Recursos', icon: <EditIcon />, path: '/solicitar-recursos' }

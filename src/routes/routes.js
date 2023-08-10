@@ -3,6 +3,7 @@ const router = express.Router();
 const { Estudiante } = require('../models/modelo');
 const { Encargado } = require('../models/modelo');
 const { Entrenador } = require('../models/modelo');
+const { Entrenamiento } = require('../models/modelo');
 const { SolicitudImplementos, RecintoDeportivo, SolicitudRecinto } = require('../models/modelo');
 const { RamaDeportiva, TipoEspacio, Recursos } = require('../models/modelo');
 const { Asistencia } = require('../models/modelo');

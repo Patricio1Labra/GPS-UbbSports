@@ -66,14 +66,14 @@ const RecintoDeportivoSchema = new Schema({
 
 // Esquema para Entrenamiento
 const EntrenamientoSchema = new Schema({
+  nombreRama: String,
   asistencia: {
     fecha: Date,
-    estado: Boolean
+    estado: Boolean,
   },
   horaEntrada: Date,
   horaSalida: Date,
-  descripcion: String,
-  nombreRama: String
+  descripcion: String
 });
 
 // Esquema para Encargado
