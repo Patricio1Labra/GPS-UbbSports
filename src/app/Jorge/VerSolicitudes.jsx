@@ -78,7 +78,7 @@ const SolicitudesRecintos = ({ user, setUser }) => {
     };
 
     return (
-        <div>
+        <Box sx={{ overflowX: 'auto', overflowY: 'auto', height: '100vh' }}>
       <Box sx={{ flexGrow: 1 }}>
         <AppBar position="static">
           <Toolbar className="barra" style={{ color: 'white' }}>
@@ -182,7 +182,7 @@ const SolicitudesRecintos = ({ user, setUser }) => {
                 )}
             </div>
         </div>
-    </div>
+    </Box>
         
     );
 };
