@@ -163,7 +163,7 @@ const FormularioInscripcion = ({ user, setUser }) => {
                               type="text"
                               name="nombre"
                               id="nombre"
-                              placeholder="Ingrese su Nombre pra la Rama Deportiva"
+                              placeholder="Ingrese su Nombre para la Rama Deportiva"
                               minlength="4" maxlenght="22" pattern="[a-zA-Z]+*"
                               value={datos.nombre}
                               onChange={handleChange}
@@ -174,7 +174,7 @@ const FormularioInscripcion = ({ user, setUser }) => {
                               type="text"
                               name="descripcion"
                               id="descripcion"
-                              placeholder="Ingrese una descrippcion para la rama"
+                              placeholder="Ingrese una descripción para la rama"
                               minlength="4" maxlenght="22" pattern="[a-zA-Z]+*"
                               value={datos.descripcion}
                               onChange={handleChange}
