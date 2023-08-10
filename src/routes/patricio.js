@@ -87,7 +87,7 @@ router.get('/ramas', async (req, res) => {
 
   router.post('/:estudianteId/agregarRama', async (req, res) => {
     try {
-      const { nombre, descripcion, entrenador, horario, recinto } = req.body;
+      const { id, nombre, descripcion, entrenador, horario, recinto } = req.body;
       const estudianteId = req.params.estudianteId;
   
       const updatedEstudiante = await Estudiante.findByIdAndUpdate(
@@ -95,6 +95,7 @@ router.get('/ramas', async (req, res) => {
         {
           $push: {
             ramaDeportiva: {
+              _id: id,
               nombre,
               descripcion,
               entrenador,

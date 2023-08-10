@@ -71,22 +71,48 @@ export default function Pagina({ user, setUser }) {
   }, [estudianteId]);
   
   useEffect(() => {
-    setRamasRegistradas(ramas.filter(rama => ramasEstudiante.includes(rama._id)));
-    setRamasNoRegistradas(ramas.filter(rama => !ramasEstudiante.includes(rama._id)));
+    setRamasRegistradas(ramas.filter(rama => ramasEstudiante.some(ramaEstudiante => ramaEstudiante._id === rama._id)));
+    setRamasNoRegistradas(ramas.filter(rama => !ramasEstudiante.some(ramaEstudiante => ramaEstudiante._id === rama._id)));
   }, [ramas, ramasEstudiante]);
 
-  const handleEditClick = (isRegistered, item) => {
+  const handleEditClick = async(isRegistered, item) => {
     try {
       if (isRegistered) {
-        axios.delete(`/api1/${estudianteId}/eliminarRama/${item._id}`);
+        const response = await fetch(`/api1/${estudianteId}/eliminarRama/${item._id}`, {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        });
+        if (response.ok) {
+          // Actualizar la lista de ramas del estudiante en el cliente
+          setRamasEstudiante(ramasEstudiante.filter(rama => rama._id !== item._id));
+        } else {
+          console.error('Error al borrar la rama');
+        }
       } else {
-        axios.post(`/api1/${estudianteId}/agregarRama`, {
+        const requestBody = {
+          id: item._id,
           nombre: item.nombre,
           descripcion: item.descripcion,
           entrenador: item.entrenador,
           horario: item.horario,
           recinto: item.recinto
+        };
+        
+        const response = await fetch(`/api1/${estudianteId}/agregarRama`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(requestBody)
         });
+        if (response.ok) {
+          // Actualizar la lista de ramas del estudiante en el cliente
+          setRamasEstudiante([...ramasEstudiante, item]);
+        } else {
+          console.error('Error al agregar la ramma');
+        }
       }
     } catch (error) {
       console.error('Error al editar rama:', error);
