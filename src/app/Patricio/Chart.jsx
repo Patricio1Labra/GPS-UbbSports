@@ -135,7 +135,7 @@ export default function Pagina({ user, setUser }) {
             console.error('Error:', errorMessage);
           }
         } else {
-          console.error('Error al agregar la ramma');
+          console.error('Error al agregar la rama');
         }
       }
     } catch (error) {
