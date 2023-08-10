@@ -1,8 +1,5 @@
-
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-
-
 
 
 // Esquema para Entrenador
@@ -24,7 +21,14 @@ const SolicitudImplementosSchema = new Schema({
   fechadesolicitud: Date,
   estadosolicitud: String
 });
-
+const SolicitudRecintoSchema = new Schema({
+  motivo: String,
+  estudiante: String,
+  fechadesolicitud: Date,
+  fechaparausar: Date,
+  estadosolicitud: String,
+  RecintoDeportivo: String
+});
 // Esquema para Estudiante
 const EstudianteSchema = new Schema({
   nombre: String,
@@ -40,8 +44,8 @@ const EstudianteSchema = new Schema({
     entrenador: String,
     horario: {
       dia: String,
-      horaInicio: Date,
-      horaSalida: Date
+      horaInicio: String,
+      horaSalida: String
     },
     recinto: String
 
@@ -49,8 +53,6 @@ const EstudianteSchema = new Schema({
   implementosSolicitados: [String],
   recintoSolicitado: String
 });
-
-
 
 // Esquema para Recinto Deportivo
 const RecintoDeportivoSchema = new Schema({
@@ -60,13 +62,14 @@ const RecintoDeportivoSchema = new Schema({
 
 // Esquema para Entrenamiento
 const EntrenamientoSchema = new Schema({
-  asistencia:{
+  asistencia: {
     fecha: Date,
     estado: Boolean
   },
   horaEntrada: Date,
   horaSalida: Date,
-  descripcion: String
+  descripcion: String,
+  nombreRama: String
 });
 
 // Esquema para Encargado
@@ -88,14 +91,13 @@ const RamaDeportivaSchema = new Schema({
   entrenador: String,
   horario: {
     dia: String,
-    horaInicio: Date,
-    horaSalida: Date
+    horaInicio: String,
+    HoraSalida: String
   },
   cupos: Number,
   recinto: String,
   entrenamiento: String
 });
-
 
 // Esquema para Recursos
 const RecursosSchema = new Schema({
@@ -103,30 +105,39 @@ const RecursosSchema = new Schema({
   monto: Number,
   descripciondeSolicitud: String,
   ramaSolicitante: String,
-  participantes: [String]
+  participantes: [String],
+  estadoSolicitud: String
+});
+
+const AsistenciaSchema = new Schema({
+  nombreAlumno: String,
+  estado: Boolean,
+  horaEntrada: Date,
+  horaSalida: Date
 });
 
 // Modelos basados en los esquemas
-
-
 const Entrenador = mongoose.model('Entrenador', EntrenadorSchema);
 const SolicitudImplementos = mongoose.model('SolicitudImplementos', SolicitudImplementosSchema);
+const SolicitudRecinto = mongoose.model('SolicitudRecinto', SolicitudRecintoSchema);
 const Estudiante = mongoose.model('Estudiante', EstudianteSchema);
 const RecintoDeportivo = mongoose.model('RecintoDeportivo', RecintoDeportivoSchema);
 const Entrenamiento = mongoose.model('Entrenamiento', EntrenamientoSchema);
 const Encargado = mongoose.model('Encargado', EncargadoSchema);
 const RamaDeportiva = mongoose.model('RamaDeportiva', RamaDeportivaSchema);
 const Recursos = mongoose.model('Recursos', RecursosSchema);
+const Asistencia = mongoose.model('Asistencia', AsistenciaSchema);
 
 // Exportar los modelos
 module.exports = {
-
   Entrenador,
   SolicitudImplementos,
+  SolicitudRecinto,
   Estudiante,
   RecintoDeportivo,
   Entrenamiento,
   Encargado,
   RamaDeportiva,
-  Recursos
+  Recursos,
+  Asistencia
 };

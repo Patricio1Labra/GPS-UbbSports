@@ -1,22 +1,43 @@
-import React from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import Luis from './Luis/index.jsx'; // Asegúrate de que la ruta sea correcta
+import React, { useState } from 'react';
+import { Routes, Route, BrowserRouter } from 'react-router-dom'
+import { Formulario } from './Felipe/Formulario.jsx';
+import { Home } from './Felipe/Home.jsx';
+import { HomeEncargado } from './Felipe/HomeEncargado.jsx';
+import { HomeEntrenador } from './Felipe/HomeEntrenador.jsx';
+import { VerSolicitudesImplemento } from './Felipe/Vistas/VerSolicitudesImplemento.jsx'; 
 
 
 import VerRamaInscritas from './Luis/verRamaInscritas.jsx';
 
 
-const App = () => {
-    return (
-        <Router>
-            <Routes>
-                {/* Cambia las rutas y componentes según tus necesidades */}
-                <Route path="/" element={<Luis />} />                
+function App() {
+    const storedUser = JSON.parse(localStorage.getItem('user'));
+    const [user, setUser] = useState(storedUser || []);
+  
+   return (
+      <BrowserRouter>
+        <Routes>
+          <Route
+            path="/"
+            element={<Formulario user={user} setUser={setUser} />}
+          />
+          <Route
+            path="/home"
+            element={<Home user={user} setUser={setUser} />}
+          />
+          <Route
+            path="/home-encargado"
+            element={<HomeEncargado user={user} setUser={setUser} />}
+          />
+          <Route
+            path="/home-entrenador"
+            element={<HomeEntrenador user={user} setUser={setUser} />}
+          />             
                 
-                <Route path="/ver-ramas-inscritas" element={<VerRamaInscritas />} />
+            <Route path="/ver-ramas-inscritas" element={<VerRamaInscritas user={user} setUser={setUser}/>} />
                 
             </Routes>
-        </Router>
+        </BrowserRouter>
     );
 };
 
