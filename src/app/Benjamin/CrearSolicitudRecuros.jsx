@@ -62,7 +62,7 @@ const CrearSolicitudRecursos = ({ user, setUser }) => {
             setMonto(0);
             setDescripcion('');
             setRamaSolicitante('');
-            setParticipantes('');
+            setParticipantes([]);
         } catch (error) {
             console.error('Error al crear la solicitud de recursos', error);
         }
@@ -81,8 +81,11 @@ const CrearSolicitudRecursos = ({ user, setUser }) => {
     const handleChange = event => {
         setSelectedRama(event.target.value);
         const selectedOptions = Array.from(event.target.selectedOptions, option => option.value);
-        setSelectedEstudiante(selectedOptions);
     };    
+    const handleEstudianteChange = event => {
+        const selectedOptions = Array.from(event.target.selectedOptions, option => option.value);
+        setSelectedEstudiante(selectedOptions);
+    };
     
     return (
         <div>
@@ -154,7 +157,7 @@ const CrearSolicitudRecursos = ({ user, setUser }) => {
                         <div className="mb-3">
                             <label htmlFor="descipcion" className="form-label">Participantes de la rama</label>
                             <br />
-                            <select className='form-select m-10 w-100 align-self-center controls' multiple value={selectedEstudiante} onChange={handleChange}>
+                            <select className='form-select m-10 w-100 align-self-center controls' multiple value={selectedEstudiante} onChange={handleEstudianteChange}>
                               <option value="">Agregue estudiantes</option>
                               {estudiantes.map(estudiante => (
 
