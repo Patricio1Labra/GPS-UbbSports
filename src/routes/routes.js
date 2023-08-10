@@ -4,7 +4,7 @@ const { Estudiante } = require('../models/modelo');
 const { Encargado } = require('../models/modelo');
 const { Entrenador } = require('../models/modelo');
 const { SolicitudImplementos, RecintoDeportivo, SolicitudRecinto } = require('../models/modelo');
-const { RamaDeportiva, TipoEspacio } = require('../models/modelo');
+const { RamaDeportiva, TipoEspacio, Recursos } = require('../models/modelo');
 const { Asistencia } = require('../models/modelo');
 const moment = require('moment'); // Importa el paquete moment
 

@@ -11,7 +11,7 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import "../Felipe/Home.css";
-import TemporaryDrawer from '../Felipe/Comps/TempEncargado.jsx';
+import TemporaryDrawer from '../Felipe/Comps/TempEntrenador.jsx';
 
 
 const CrearSolicitudImplementos = ({ user, setUser }) => {
