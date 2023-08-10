@@ -190,7 +190,7 @@ const DropdownRamaDeportiva = ({ user, setUser }) => {
                                   type="text"
                                   name="nombre"
                                   value={editedData.nombre}
-                                  placeholder="Ingrese su Nombre pra la Rama Deportiva"
+                                  placeholder="Ingrese su Nombre para la Rama Deportiva"
                                   minlength="4" maxlenght="22" pattern="[a-zA-Z]+*"
                                   onChange={handleFormChange}
                                 />
@@ -198,7 +198,7 @@ const DropdownRamaDeportiva = ({ user, setUser }) => {
                                   type="text"
                                   name="descripcion"
                                   value={editedData.descripcion}
-                                  placeholder="Ingrese una descrippcion para la rama"
+                                  placeholder="Ingrese una descripción para la rama"
                                   minlength="4" maxlenght="22" pattern="[a-zA-Z]+*"
                                   onChange={handleFormChange}
                                 />
